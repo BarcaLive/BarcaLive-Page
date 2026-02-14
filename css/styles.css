@@ -96,26 +96,27 @@ body {
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
-    border: 1px solid var(--glass-border);
-    border-top: 1px solid var(--glass-highlight);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    /* Subtler border */
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 24px;
-    /* Reverted to 24px for v4 fix */
-    box-shadow: var(--glass-shadow);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    /* Softer shadow */
     /* Removed padding: 0 to allow utility classes to work */
     overflow: hidden;
-    transition: transform 0.3s var(--spring-easing), box-shadow 0.3s ease;
+    transition: transform 0.4s var(--spring-easing), box-shadow 0.4s ease;
 }
 
 .glass-content {
-    padding: 24px;
+    padding: 32px;
+    /* Increased default internal padding */
 }
 
 .glass-header {
-    margin: 12px;
-    padding: 16px 24px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 24px;
-    /* Rounded header "tile" */
+    margin: 16px;
+    padding: 20px 24px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -123,11 +124,18 @@ body {
 }
 
 body.light-theme .glass-header {
-    background: rgba(0, 0, 0, 0.03);
+    background: rgba(0, 0, 0, 0.02);
 }
 
 .glass-premium:active {
-    transform: scale(0.98);
+    transform: scale(0.99);
+}
+
+/* Typography Helpers - Overrides */
+h2.theme-text {
+    margin-bottom: 24px !important;
+    /* Added spacing below headers like "Recent Form" */
+    display: block;
 }
 
 /* Typography */
@@ -135,8 +143,8 @@ h1,
 h2,
 h3 {
     font-weight: 700;
-    letter-spacing: -0.02em;
-    /* Tight iOS tracking */
+    letter-spacing: -0.03em;
+    /* Tighter tracking for Apple headers */
     margin: 0;
 }
 
@@ -144,232 +152,15 @@ h3 {
     color: var(--text-secondary);
 }
 
-.bg-live-win {
-    background: linear-gradient(135deg, #166534, #15803d) !important;
-    color: white !important;
-}
-
-.bg-live-draw {
-    background: linear-gradient(135deg, #4b5563, #374151) !important;
-    color: white !important;
-}
-
-.bg-live-loss {
-    background: linear-gradient(135deg, #991b1b, #b91c1c) !important;
-    color: white !important;
-}
-
-.bg-live-neutral {
-    background: #000;
-}
-
-
-
-/* Dynamic Island */
-.island-container {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 9999;
-    user-select: none;
-}
-
-
-
-.island {
-    background: #000;
-    border-radius: 100px;
-    transition: all 0.6s var(--spring-easing);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    /* Initial State */
-    width: 120px;
-    height: 36px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-    color: #fff;
-    /* Ensure text is white in dark mode/default */
-}
-
-body.light-theme .island {
-    background: #ffffff;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    color: #000;
-}
-
-body.light-theme .island span {
-    color: #000 !important;
-}
-
-body.light-theme .island .text-gold {
-    color: #b08d00 !important;
-}
-
-
-.island.expanded {
-    width: 360px;
-    height: 80px;
-    border-radius: 44px;
-    padding: 0 16px;
-}
-
-/* Navigation - Mobile Tab Bar */
-.tab-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: var(--tab-bar-height);
-    background: rgba(20, 20, 25, 0.7);
-    /* More transparent */
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border-top: 1px solid var(--glass-border);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    /* Centered Bug 2c */
-    z-index: 1000;
-    padding-bottom: env(safe-area-inset-bottom);
-}
-
-
-body.light-theme .tab-bar {
-    background: rgba(255, 255, 255, 0.7);
-}
-
-
-.tab-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-size: 10px;
-    font-weight: 500;
-    width: 64px;
-    transition: color 0.2s ease;
-}
-
-.tab-item svg {
-    width: 28px;
-    height: 28px;
-    stroke-width: 2px;
-    transition: transform 0.2s var(--spring-easing);
-}
-
-.tab-item.active {
-    color: var(--text-color);
-}
-
-.tab-item.active svg {
-    transform: translateY(-2px);
-    stroke: var(--gold);
-    /* Highlight color */
-}
-
-@media (min-width: 769px) {
-    .desktop-nav {
-        display: flex;
-    }
-
-    .tab-bar {
-        display: none;
-    }
-}
-
-
-
-/* Animations */
-.animate-in {
-    animation: staggerReveal 0.6s var(--spring-easing) forwards;
-    opacity: 0;
-    transform: translateY(20px);
-}
-
-@keyframes staggerReveal {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Helper Classes */
-.flex-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.w-full {
-    width: 100%;
-}
-
-.h-full {
-    height: 100%;
-}
-
-.text-xs {
-    font-size: 12px;
-}
-
-.text-sm {
-    font-size: 14px;
-}
-
-.text-lg {
-    font-size: 18px;
-}
-
-.text-xl {
-    font-size: 24px;
-}
-
-.font-bold {
-    font-weight: 700;
-}
-
-.opacity-50 {
-    opacity: 0.5;
-}
-
-.uppercase {
-    text-transform: uppercase;
-}
-
-.tracking-widest {
-    letter-spacing: 0.1em;
-}
-
-.text-gold {
-    color: var(--gold);
-}
-
-.text-red {
-    color: #FF3B30;
-}
+/* ... (colors remain same) ... */
 
 /* Tables */
 .table-wrapper,
 .overflow-x-auto {
     overflow-x: auto !important;
     overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    /* Smooth iOS scrolling */
     border-radius: 16px;
 }
 
@@ -380,24 +171,31 @@ body.light-theme .tab-bar {
 
 .football-table th {
     text-align: left;
-    padding: 18px 16px;
-    font-size: 10px;
-    font-weight: 900;
+    padding: 18px 20px;
+    /* Increased padding */
+    font-size: 11px;
+    font-weight: 600;
+    /* Slightly less bold */
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.05em;
     color: var(--text-secondary);
-    opacity: 0.4;
+    opacity: 0.6;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .football-table td {
-    padding: 20px 16px;
+    padding: 20px 20px;
+    /* Increased padding */
     font-weight: 500;
+    font-size: 15px;
+    /* Increased font size for readability */
+    white-space: nowrap;
+    /* Prevent wrapping */
 }
 
 .football-table tr {
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .football-table tr:hover {
@@ -407,6 +205,14 @@ body.light-theme .tab-bar {
 .football-table tr:last-child {
     border-bottom: none;
 }
+
+/* Team Name Specifics */
+.football-table td:nth-child(2) {
+    /* Assuming 2nd column is team name */
+    font-weight: 600;
+    color: var(--text-color);
+}
+
 
 /* Glow for Barca */
 .highlight-barca {
@@ -419,8 +225,8 @@ body.light-theme .tab-bar {
 
 .highlight-barca img {
     /* Crest */
-    filter: drop-shadow(0 0 8px rgba(165, 0, 68, 0.6));
-    /* Red glow */
+    filter: drop-shadow(0 0 12px rgba(165, 0, 68, 0.4));
+    /* Softer glow */
 }
 
 /* Toggle Pill - iOS Native Style */
