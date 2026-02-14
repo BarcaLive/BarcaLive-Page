@@ -126,12 +126,12 @@ body {
     justify-content: center;
     /* Center instead of space-between */
     gap: 0.5vw;
-    /* Slight gap but tight */
-    padding: 0 2vw;
+    /* Increased side padding effectively reduces max width */
+    padding: 0 5vw;
     font-family: 'Satoshi', sans-serif;
     font-weight: 900;
-    /* Massive sizing */
-    font-size: clamp(80px, 22vw, 400px);
+    /* Reduced sizing */
+    font-size: clamp(40px, 15vw, 200px);
     line-height: 0.8;
     letter-spacing: -0.06em;
     /* Tight tracking */
@@ -143,16 +143,10 @@ body {
 .footer-letter {
     display: inline-block;
     color: var(--text-color);
-    transition: transform 0.4s var(--spring-easing), opacity 0.4s ease;
+    /* No animation */
 }
 
-.footer-letter:hover {
-    transform: translateY(-20px) scale(1.1);
-    opacity: 1;
-    /* Brighten on hover */
-    color: var(--gold);
-    /* Optional: add brand color on hover */
-}
+/* Removed hover effect */
 
 /* Ambient Mode (Match Day) */
 .match-live .mesh-bg {
