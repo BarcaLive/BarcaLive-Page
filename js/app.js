@@ -410,18 +410,19 @@ async function initOverview() {
     if (Array.isArray(matches)) {
         const today = new Date();
         const allMatches = matches;
+        const allMatchesWithDates = allMatches.map(m => ({ m, d: new Date(m.utcDate) }));
         matches = {
-            live: allMatches.filter(m => ['IN_PLAY', 'PAUSED', 'LIVE', 'HALFTIME'].includes(m.status?.toUpperCase())),
-            upcoming: allMatches.filter(m => {
-                const s = m.status?.toUpperCase();
+            live: allMatchesWithDates.filter(x => ['IN_PLAY', 'PAUSED', 'LIVE', 'HALFTIME'].includes(x.m.status?.toUpperCase())).map(x => x.m),
+            upcoming: allMatchesWithDates.filter(x => {
+                const s = x.m.status?.toUpperCase();
                 const isUp = ['SCHEDULED', 'TIMED', 'NOT_STARTED', 'UPCOMING'].includes(s);
-                return new Date(m.utcDate) >= today || isUp;
-            }).sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate)),
-            finished: allMatches.filter(m => {
-                const s = m.status?.toUpperCase();
+                return x.d >= today || isUp;
+            }).sort((a, b) => a.d - b.d).map(x => x.m),
+            finished: allMatchesWithDates.filter(x => {
+                const s = x.m.status?.toUpperCase();
                 const isFin = ['FINISHED', 'FT', 'AET', 'PEN'].includes(s);
-                return (new Date(m.utcDate) < today && s !== 'NOT_STARTED') || isFin;
-            }).sort((a, b) => new Date(b.utcDate) - new Date(a.utcDate))
+                return (x.d < today && s !== 'NOT_STARTED') || isFin;
+            }).sort((a, b) => b.d - a.d).map(x => x.m)
         };
     }
 
@@ -437,7 +438,10 @@ async function initOverview() {
     let pastMatches = (matches.finished || []); // Already sorted if manual, else API default
     // Ensure sorting if from API object without sorting guarantee
     if (!Array.isArray(res.data.matches)) { // Only if we didn't just sort it above
-        pastMatches.sort((a, b) => new Date(b.utcDate) - new Date(a.utcDate));
+        pastMatches = pastMatches
+            .map(m => ({ m, d: new Date(m.utcDate) }))
+            .sort((a, b) => b.d - a.d)
+            .map(x => x.m);
     }
     pastMatches = pastMatches.slice(0, formCount);
 
@@ -1090,22 +1094,21 @@ function renderScheduleList(type) {
     let filtered = [];
 
     // Sort logic
-    // Sort logic
+    const matchesWithDates = matches.map(m => ({ m, d: new Date(m.utcDate) }));
+
     if (type === 'upcoming') {
-        filtered = matches.filter(m => {
-            const mDate = new Date(m.utcDate);
-            const status = m.status ? m.status.toUpperCase() : '';
+        filtered = matchesWithDates.filter(x => {
+            const status = x.m.status ? x.m.status.toUpperCase() : '';
             const isUpcomingStatus = ['SCHEDULED', 'TIMED', 'NOT_STARTED', 'UPCOMING'].includes(status);
-            return mDate >= today || isUpcomingStatus;
-        }).sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate));
+            return x.d >= today || isUpcomingStatus;
+        }).sort((a, b) => a.d - b.d).map(x => x.m);
     } else {
         // Results: Newest first (Descending)
-        filtered = matches.filter(m => {
-            const mDate = new Date(m.utcDate);
-            const status = m.status ? m.status.toUpperCase() : '';
+        filtered = matchesWithDates.filter(x => {
+            const status = x.m.status ? x.m.status.toUpperCase() : '';
             const isFinishedStatus = ['FINISHED', 'FT', 'AET', 'PEN'].includes(status);
-            return (mDate < today && status !== 'NOT_STARTED' && status !== 'SCHEDULED' && status !== 'TIMED') || isFinishedStatus;
-        }).sort((a, b) => new Date(b.utcDate) - new Date(a.utcDate));
+            return (x.d < today && status !== 'NOT_STARTED' && status !== 'SCHEDULED' && status !== 'TIMED') || isFinishedStatus;
+        }).sort((a, b) => b.d - a.d).map(x => x.m);
     }
     console.log(`SCHEDULE DEBUG: Filtering for ${type}. Total: ${matches.length}, Filtered: ${filtered.length}`);
 
