@@ -339,22 +339,20 @@ function renderRecentForm(matches) {
   });
 
   const html = `
-    <div class="flex flex-col h-full justify-start gap-2">
+    <div class="flex flex-col h-full justify-start gap-4 pt-2">
          <!-- Summary Stats -->
-         <div class="flex items-center justify-around py-2 px-4 bg-white/5 rounded-2xl border border-white/5 shrink-0">
-             <div class="flex flex-col items-center">
+         <div class="grid grid-cols-3 divide-x divide-white/10 py-3 px-2 bg-white/5 rounded-2xl border border-white/5 shrink-0 w-full">
+             <div class="flex flex-col items-center justify-center px-1 text-center">
                  <span class="text-xl font-black text-green-500">${wins}</span>
-                 <span class="text-[8px] uppercase font-bold opacity-60 theme-text">${t('wins')}</span>
+                 <span class="text-[8px] uppercase font-bold opacity-60 theme-text break-words w-full">${t('wins')}</span>
              </div>
-             <div class="w-[1px] h-6 bg-white/10"></div>
-             <div class="flex flex-col items-center">
+             <div class="flex flex-col items-center justify-center px-1 text-center">
                  <span class="text-xl font-black opacity-60 theme-text">${draws}</span>
-                 <span class="text-[8px] uppercase font-bold opacity-40 theme-text">${t('draws')}</span>
+                 <span class="text-[8px] uppercase font-bold opacity-40 theme-text break-words w-full">${t('draws')}</span>
              </div>
-             <div class="w-[1px] h-6 bg-white/10"></div>
-             <div class="flex flex-col items-center">
+             <div class="flex flex-col items-center justify-center px-1 text-center">
                  <span class="text-xl font-black text-red-500">${losses}</span>
-                 <span class="text-[8px] uppercase font-bold opacity-60 theme-text">${t('losses')}</span>
+                 <span class="text-[8px] uppercase font-bold opacity-60 theme-text break-words w-full">${t('losses')}</span>
              </div>
          </div>
 
