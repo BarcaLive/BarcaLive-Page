@@ -3,11 +3,16 @@
   "version": "1.0.0",
   "scripts": {
     "build:styles": "npx @tailwindcss/cli@latest -i ./css/styles.css -o ./css/styles_final.css --minify --watch",
-    "build": "npx @tailwindcss/cli@latest -i ./css/styles.css -o ./css/styles_final.css --minify",
+    "build:js:components": "esbuild js/components.js --minify --outfile=js/components.min.js",
+    "build:js:i18n": "esbuild js/i18n.js --minify --outfile=js/i18n.min.js",
+    "build:js:main": "esbuild assets/js/main.js --bundle --minify --format=esm --outfile=assets/js/main.bundle.js",
+    "build:js": "npm run build:js:components && npm run build:js:i18n && npm run build:js:main",
+    "build": "npx @tailwindcss/cli@latest -i ./css/styles.css -o ./css/styles_final.css --minify && npm run build:js",
     "pages:build": "npm run build"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.23",
+    "esbuild": "^0.27.3",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18"
   },

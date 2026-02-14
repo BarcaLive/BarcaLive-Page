@@ -327,7 +327,7 @@ const I18n = {
         } else if (this.availableLangs.includes(browser)) {
             this.currentLang = browser;
         } else {
-            this.currentLang = 'pl';
+            this.currentLang = 'en';
         }
 
         // Initial translation
