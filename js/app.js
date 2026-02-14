@@ -488,8 +488,14 @@ function stopMinuteUpdater() {
     }
 }
 
+let cachedMinuteElement = null;
+
 function updateLiveMinute(match) {
-    const minuteElement = document.querySelector('[data-live-minute]');
+    if (!cachedMinuteElement || !cachedMinuteElement.isConnected) {
+        cachedMinuteElement = document.querySelector('[data-live-minute]');
+    }
+    const minuteElement = cachedMinuteElement;
+
     if (!minuteElement) return;
 
     // Use fresh match data if available
