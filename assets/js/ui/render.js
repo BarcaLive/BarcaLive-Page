@@ -275,9 +275,9 @@ function renderNextMatch(match, isLive, standings) {
                   style="box-shadow:0 0 30px ${homeColor}20;">
                 <img src="${match.homeTeam.crest}" alt="${homeName}" class="w-12 h-12 md:w-20 md:h-20 object-contain no-animate">
              </div>
-             <h2 class="font-bold text-base md:text-2xl theme-text leading-tight">
+             <h2 class="font-bold text-base md:text-2xl theme-text leading-tight whitespace-nowrap">
                 ${homeName}
-                ${homePos ? `<div class="mt-1"><span class="bg-white/10 text-[9px] px-1.5 py-0.5 rounded opacity-60 font-mono theme-text">#${homePos}</span></div>` : ''}
+                ${homePos ? `<div class="mt-1"><span class="bg-white/10 text-[9px] px-1.5 py-0.5 rounded opacity-60 font-mono theme-text whitespace-normal">#${homePos}</span></div>` : ''}
              </h2>
         </div>
 
@@ -296,9 +296,9 @@ function renderNextMatch(match, isLive, standings) {
              <div class="w-20 h-20 md:w-32 md:h-32 bg-white/5 rounded-[24px] md:rounded-[40px] flex items-center justify-center border border-white/10 mb-3 mx-auto shadow-xl transition-all">
                 <img src="${match.awayTeam.crest}" alt="${awayName}" class="w-12 h-12 md:w-20 md:h-20 object-contain no-animate">
              </div>
-             <h2 class="font-bold text-base md:text-2xl theme-text leading-tight">
+             <h2 class="font-bold text-base md:text-2xl theme-text leading-tight whitespace-nowrap">
                 ${awayName}
-                ${awayPos ? `<div class="mt-1"><span class="bg-white/10 text-[9px] px-1.5 py-0.5 rounded opacity-60 font-mono theme-text">#${awayPos}</span></div>` : ''}
+                ${awayPos ? `<div class="mt-1"><span class="bg-white/10 text-[9px] px-1.5 py-0.5 rounded opacity-60 font-mono theme-text whitespace-normal">#${awayPos}</span></div>` : ''}
              </h2>
         </div>
 

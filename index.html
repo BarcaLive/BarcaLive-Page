@@ -13,14 +13,14 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
     <script>
-    // Force unregister Service Worker to prevent staging/caching issues
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function (registrations) {
-            for (let registration of registrations) {
-                registration.unregister();
-            }
-        });
-    }
+        // Force unregister Service Worker to prevent staging/caching issues
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                for (let registration of registrations) {
+                    registration.unregister();
+                }
+            });
+        }
     </script>
 
     <!-- Google Fonts: Inter -->
@@ -169,9 +169,8 @@
             <div id="header-nav"></div>
         </header>
 
-        <section id="view-overview" class="grid grid-cols-1 md:grid-cols-12 gap-6">
+        <section id="view-overview" class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10">
             <div class="md:col-span-8 glass-premium p-8 relative overflow-hidden group h-fit">
-                <!-- Badge is now rendered dynamically by JavaScript in renderNextMatch() -->
                 <!-- Badge is now rendered dynamically by JavaScript in renderNextMatch() -->
                 <div id="next-match-container" class="min-h-[220px] flex items-center justify-center relative">
                     <!-- SKELETON LOADER (LCP Fix) -->
@@ -206,7 +205,7 @@
                     </div>
                 </div>
 
-                <div class="mt-8 flex justify-center">
+                <div class="mt-10 flex justify-center">
                     <a href="schedule.html" data-spa="true" data-i18n="seeFullSchedule"
                         class="bg-white text-black px-8 py-3 rounded-2xl font-bold text-sm hover:scale-105 transition-transform">See
                         Full Schedule</a>
@@ -214,22 +213,22 @@
             </div>
 
             <div class="md:col-span-4 glass-premium p-8 h-fit flex flex-col overflow-hidden">
-                <h2 class="text-xs font-black uppercase tracking-widest theme-text mb-6" data-i18n="recentForm">
+                <h2 class="text-xs font-black uppercase tracking-widest theme-text mb-8" data-i18n="recentForm">
                     Recent
                     Form</h2>
-                <div id="recent-form-container" class="space-y-4 flex-1 min-h-[250px] overflow-hidden">
+                <div id="recent-form-container" class="space-y-5 flex-1 min-h-[250px] overflow-hidden">
                 </div>
             </div>
         </section>
 
         <!-- Where to watch section -->
-        <section class="mt-6 glass-premium p-8">
-            <div class="flex justify-between items-center mb-6">
+        <section class="mt-10 glass-premium p-8">
+            <div class="flex justify-between items-center mb-8">
                 <h2 class="text-xs font-black uppercase tracking-widest theme-text" data-i18n="whereToWatch">Where to
                     Watch</h2>
             </div>
 
-            <div id="transmissions-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div id="transmissions-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
             </div>
         </section>
     </main>
