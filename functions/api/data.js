@@ -14,8 +14,7 @@ export async function onRequest(context) {
         if (!supabaseUrl || !supabaseKey) {
             console.error('[API] Missing environment variables:', {
                 hasUrl: !!supabaseUrl,
-                hasKey: !!supabaseKey,
-                keys: Object.keys(context.env || {}) // Log available keys for debugging
+                hasKey: !!supabaseKey
             });
             throw new Error('Server misconfiguration: Missing Supabase credentials');
         }
