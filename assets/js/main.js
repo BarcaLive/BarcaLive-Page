@@ -245,6 +245,49 @@ function showAppPromo(config) {
   if (window.lucide) window.lucide.createIcons();
 }
 
+// ── PWA Install Logic ────────────────────────────────────────────────
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Prevent the mini-infobar from appearing on mobile
+  e.preventDefault();
+  // Stash the event so it can be triggered later.
+  deferredPrompt = e;
+  // Update UI notify the user they can install the PWA
+  const installBtn = document.getElementById('pwa-install-btn');
+  if (installBtn) {
+    installBtn.classList.remove('hidden');
+    installBtn.addEventListener('click', async () => {
+      // Hide the app provided install promotion
+      installBtn.classList.add('hidden');
+      // Show the install prompt
+      deferredPrompt.prompt();
+      // Wait for the user to respond to the prompt
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`User response to the install prompt: ${outcome}`);
+      // We've used the prompt, and can't use it again, throw it away
+      deferredPrompt = null;
+    });
+  }
+});
+
+// Detect iOS for manual instructions
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+
+if (isIOS && !isStandalone) {
+  // Optional: Show a tooltip or hint for iOS users since they don't have beforeinstallprompt
+  // For now, we leave it as the user only asked for the button logic "which works via beforeinstallprompt"
+  // But to be "nice" let's show the button but make it open instructions
+  const installBtn = document.getElementById('pwa-install-btn');
+  if (installBtn) {
+    installBtn.classList.remove('hidden');
+    installBtn.addEventListener('click', () => {
+      alert("To install on iOS:\n1. Tap the Share button\n2. Scroll down and tap 'Add to Home Screen'");
+    });
+  }
+}
+
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initSPA);

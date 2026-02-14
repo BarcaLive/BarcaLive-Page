@@ -13,12 +13,16 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
     <script>
-        // Force unregister Service Worker to prevent staging/caching issues
+        // Register Service Worker for PWA support
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(function (registrations) {
-                for (let registration of registrations) {
-                    registration.unregister();
-                }
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('SW registered:', registration);
+                    })
+                    .catch(error => {
+                        console.log('SW registration failed:', error);
+                    });
             });
         }
     </script>
@@ -36,7 +40,9 @@
     <link rel="preload" href="assets/fonts/SFPRODISPLAYBOLD.woff" as="font" type="font/woff" crossorigin>
 
     <!-- Preload Critical LCP Image (FC Barcelona Crest) -->
-    <link rel="preload" as="image" href="https://bwmkvehxzcdzdxiqdqin.supabase.co/storage/v1/object/public/logos/teams/2017.webp?width=96&height=96&quality=70&format=webp" fetchpriority="high">
+    <link rel="preload" as="image"
+        href="https://bwmkvehxzcdzdxiqdqin.supabase.co/storage/v1/object/public/logos/teams/2017.webp?width=96&height=96&quality=70&format=webp"
+        fetchpriority="high">
 
     <!-- SEO Meta Tags -->
     <meta name="description"
@@ -162,7 +168,19 @@
                 <h1 class="text-5xl md:text-7xl font-bold tracking-tighter theme-text-gradient" data-i18n="overview">
                     Overview</h1>
             </div>
-            <div id="header-nav"></div>
+            <div id="header-nav" class="flex items-center gap-4">
+                <button id="pwa-install-btn"
+                    class="hidden glass-premium px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest theme-text hover:bg-white/10 transition-all flex items-center gap-2"
+                    aria-label="Install App">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    <span>Install App</span>
+                </button>
+            </div>
         </header>
 
         <section id="view-overview" class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10">
