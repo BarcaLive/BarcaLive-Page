@@ -191,57 +191,7 @@ window.updateThemeIcons = function () {
 };
 
 // --- NOTIFICATIONS ---
-const NotificationManager = {
-    async requestPermission() {
-        if (!("Notification" in window)) {
-            console.warn("Notifications not supported");
-            return false;
-        }
-        if (Notification.permission === "granted") return true;
-        if (Notification.permission === "denied") {
-            alert("Notification permission was denied. Please enable it in browser settings.");
-            return false;
-        }
-
-        try {
-            const permission = await Notification.requestPermission();
-            return permission === "granted";
-        } catch (e) {
-            // Fallback for older browsers
-            return new Promise((resolve) => {
-                Notification.requestPermission((p) => resolve(p === "granted"));
-            });
-        }
-    },
-
-    send(title, body) {
-        if (!("Notification" in window) || Notification.permission !== "granted") return;
-        new Notification(title, { body });
-    }
-};
-
-window.getNotificationSetting = (key) => {
-    const settings = JSON.parse(localStorage.getItem('bp_notifications') || '{}');
-    return !!settings[key]; // Default false
-};
-
-window.toggleNotification = async function (key) {
-    const settings = JSON.parse(localStorage.getItem('bp_notifications') || '{}');
-    const newState = !settings[key];
-
-    if (newState) {
-        const granted = await NotificationManager.requestPermission();
-        if (!granted) return;
-    }
-
-    settings[key] = newState;
-    localStorage.setItem('bp_notifications', JSON.stringify(settings));
-
-    // Refresh UI
-    if (window.initComponents && window.currentPage) {
-        window.initComponents(window.currentPage);
-    }
-};
+// Logic removed as it is handled by assets/js/main.js and js/components.js
 
 // --- MOBILE REDIRECTION (REMOVED) ---
 function checkMobile() {
@@ -284,63 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // 5. Global Match Monitoring (NOTIFICATIONS ONLY)
-    let lastMatchState = null;
-
-    async function monitorMatches() {
-        if (typeof API !== 'undefined' && API.getMatches) {
-            try {
-                const matchesData = await API.getMatches();
-                if (!matchesData) return;
-
-                // Flatten matches object to array
-                const matches = [
-                    ...(matchesData.matches.live || []),
-                    ...(matchesData.matches.upcoming || []),
-                    ...(matchesData.matches.finished || [])
-                ];
-                const today = new Date();
-                const nextMatch = matches.find(m => new Date(m.utcDate) > today);
-                const liveMatch = matches.find(m => ['IN_PLAY', 'PAUSED'].includes(m.status));
-
-                // Notification Logic
-                const currentMatch = liveMatch || nextMatch;
-                if (currentMatch) {
-                    if (lastMatchState && lastMatchState.id === currentMatch.id) {
-                        // Check for changes (Goals, Start/End)
-                        if (window.getNotificationSetting('goals')) {
-                            const oldScore = lastMatchState.score.fullTime;
-                            const newScore = currentMatch.score.fullTime;
-                            if (newScore.home !== oldScore.home || newScore.away !== oldScore.away) {
-                                NotificationManager.send(
-                                    `GOAL! ${currentMatch.homeTeam.shortName} ${newScore.home} - ${newScore.away} ${currentMatch.awayTeam.shortName}`,
-                                    `${currentMatch.competition.name}`
-                                );
-                            }
-                        }
-
-                        if (window.getNotificationSetting('matchStatus')) {
-                            if (currentMatch.status !== lastMatchState.status) {
-                                let msg = "";
-                                if (currentMatch.status === 'IN_PLAY' && lastMatchState.status === 'TIMED') msg = "Match Started!";
-                                if (currentMatch.status === 'FINISHED') msg = "Match Finished!";
-                                if (currentMatch.status === 'PAUSED') msg = "Halftime!";
-                                if (msg) NotificationManager.send(msg, `${currentMatch.homeTeam.shortName} vs ${currentMatch.awayTeam.shortName}`);
-                            }
-                        }
-                    }
-                    lastMatchState = JSON.parse(JSON.stringify(currentMatch)); // Clone
-                }
-
-                if (!window.matchMonitorInterval) {
-                    window.matchMonitorInterval = setInterval(monitorMatches, 60000);
-                }
-            } catch (err) {
-                console.error("Notification monitor error:", err);
-            }
-        }
-    }
-    window.initGlobalMonitor = monitorMatches;
-    monitorMatches();
+    // Removed
 
     // 6. Subscribe to BarcaPulse for auto-refresh during live matches
     if (window.barcaPulse) {
