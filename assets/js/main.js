@@ -29,20 +29,18 @@ const sendNotification = (title, body) => {
  */
 window.initOverviewPage = async () => {
   if (window.initComponents) window.initComponents('overview');
-  // barcaAPI.getOverview will trigger notify with cache immediately if available
-  // But we also await the network result to ensure we have data if cache is empty
-  const data = await barcaAPI.getOverview();
 
-  // If cache was empty, we render here. 
-  // If cache existed, renderOverview was already called via barcaAPI.onData subscription in initSPA
-  // However, we want to ensure it renders if we aren't subscribed yet or if race condition.
-  // Actually initSPA subscribes BEFORE calling initOverviewPage.
-  // So cache notify happens inside getOverview -> notifies subscriber -> renders.
-  // Then getOverview resolves with FRESH data -> we might render again?
+  // Optimistic Render (Stale-While-Revalidate)
+  const cached = barcaAPI.getData();
+  // Ensure cached data has the structure required for Overview (matches + standings)
+  if (cached?.matches && cached?.standings) {
+    renderOverview(cached);
+  }
 
-  // Let's safe-guard: if we get data and it wasn't rendered (hard to know), we render.
-  // But renderOverview is idempotent-ish (just overwrites HTML).
-  if (data) renderOverview(data);
+  // Network Fetch & Update (Fire-and-forget)
+  // We do not await this, so initSPA isn't blocked.
+  // The global subscription (in initSPA) will handle the UI update when data arrives.
+  barcaAPI.getOverview().catch(err => console.error('[initOverviewPage] Fetch error:', err));
 };
 
 window.initLaLigaPage = async () => {
@@ -124,21 +122,22 @@ const initSPA = async () => {
       else if (path.includes('schedule')) window.initSchedulePage();
     });
 
-    // 3. Initial Page Load
-    const path = window.location.pathname;
-    if (path === '/' || path.endsWith('index.html')) await window.initOverviewPage();
-    else if (path.includes('la-liga')) await window.initLaLigaPage();
-    else if (path.includes('ucl')) await window.initUCLPage();
-    else if (path.includes('schedule')) await window.initSchedulePage();
-    else if (path.includes('results')) await window.initResultsPage();
-
-    // 4. Subscribe to Live Data (only affects Overview really)
+    // 3. Subscribe to Live Data (only affects Overview really)
+    // Must happen BEFORE initial load so that initOverviewPage's fetch triggers this subscriber.
     barcaAPI.onData((data) => {
       // If we are on Overview, update it
       if (window.location.pathname === '/' || window.location.pathname.endsWith('index.html')) {
         renderOverview(data);
       }
     });
+
+    // 4. Initial Page Load
+    const path = window.location.pathname;
+    if (path === '/' || path.endsWith('index.html')) await window.initOverviewPage();
+    else if (path.includes('la-liga')) await window.initLaLigaPage();
+    else if (path.includes('ucl')) await window.initUCLPage();
+    else if (path.includes('schedule')) await window.initSchedulePage();
+    else if (path.includes('results')) await window.initResultsPage();
 
     barcaAmbient.init();
 
