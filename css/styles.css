@@ -98,11 +98,10 @@ body {
     -webkit-backdrop-filter: blur(var(--glass-blur));
     border: 1px solid var(--glass-border);
     border-top: 1px solid var(--glass-highlight);
-    border-radius: 32px;
-    /* Increased rounding for v4 */
+    border-radius: 24px;
+    /* Reverted to 24px for v4 fix */
     box-shadow: var(--glass-shadow);
-    padding: 0;
-    /* Changed to 0 to allow header control */
+    /* Removed padding: 0 to allow utility classes to work */
     overflow: hidden;
     transition: transform 0.3s var(--spring-easing), box-shadow 0.3s ease;
 }
