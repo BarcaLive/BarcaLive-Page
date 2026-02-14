@@ -105,8 +105,10 @@ export async function onRequest(context) {
         const matches = (matchesData || [])
             .filter(item => item !== null)
             .map(mapMatch)
-            // Explicitly sort by date to be absolutely sure
-            .sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate));
+            // Use Schwartzian transform for efficient sorting
+            .map(m => ({ m, time: new Date(m.utcDate).getTime() }))
+            .sort((a, b) => a.time - b.time)
+            .map(({ m }) => m);
 
         const standings = (standingsData || [])
             .map(s => s.standings_data || s.data || s) // Handle the new schema (standings_data)
