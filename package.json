@@ -1,12 +1,14 @@
 {
   "name": "barcalive",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
-    "build:styles": "npx @tailwindcss/cli@latest -i ./css/styles.css -o ./css/styles_final.css --minify --watch",
-    "build": "npx @tailwindcss/cli@latest -i ./css/styles.css -o ./css/styles_final.css --minify",
+    "build:styles": "npx tailwindcss -i ./css/styles.css -o ./css/styles_final.css --minify --watch",
+    "build": "npx tailwindcss -i ./css/styles.css -o ./css/styles_final.css --minify",
     "pages:build": "npm run build"
   },
   "devDependencies": {
+    "@tailwindcss/cli": "^4.0.0",
     "autoprefixer": "^10.4.23",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18"
