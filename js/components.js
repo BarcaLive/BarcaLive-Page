@@ -17,6 +17,11 @@ const Components = {
             
             <div class="w-[1px] h-4 bg-white/20 mx-1"></div>
 
+            <!-- Install App Button (Hidden by default) -->
+            <button id="pwa-install-btn-desktop" class="pwa-install-trigger hidden nav-btn p-2 rounded-[16px] opacity-50 hover:opacity-100 text-gold" title="Install App">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
+
             <!-- Settings Button -->
             <button onclick="window.toggleSettings()" class="nav-btn p-2 rounded-[16px] opacity-50 hover:opacity-100" title="Settings">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2 2 2 0 0 1-2 2 2 2 0 0 0-2 2 2 2 0 0 1-2 2 2 2 0 0 0-2 2v.44a2 2 0 0 0 2 2 2 2 0 0 1 2 2 2 2 0 0 0 2 2 2 2 0 0 1 2 2 2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2 2 2 0 0 1 2-2 2 2 0 0 0 2-2 2 2 0 0 1 2-2 2 2 0 0 0 2-2v-.44a2 2 0 0 0-2-2 2 2 0 0 1-2-2 2 2 0 0 0-2-2 2 2 0 0 1-2-2 2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -44,6 +49,11 @@ const Components = {
                 <i data-lucide="calendar"></i>
                 <span data-i18n="schedule">Schedule</span>
             </a>
+
+             <button id="pwa-install-btn-mobile" class="pwa-install-trigger hidden tab-item flex items-center justify-center text-gold">
+                <i data-lucide="download"></i>
+                <span data-i18n="install">Install</span>
+            </button>
 
              <button onclick="window.toggleSettings()" class="tab-item flex items-center justify-center">
                 <i data-lucide="settings"></i>

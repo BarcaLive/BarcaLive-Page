@@ -254,12 +254,12 @@ window.addEventListener('beforeinstallprompt', (e) => {
   // Stash the event so it can be triggered later.
   deferredPrompt = e;
   // Update UI notify the user they can install the PWA
-  const installBtn = document.getElementById('pwa-install-btn');
-  if (installBtn) {
-    installBtn.classList.remove('hidden');
-    installBtn.addEventListener('click', async () => {
+  const installBtns = document.querySelectorAll('.pwa-install-trigger');
+  installBtns.forEach(btn => {
+    btn.classList.remove('hidden');
+    btn.addEventListener('click', async () => {
       // Hide the app provided install promotion
-      installBtn.classList.add('hidden');
+      installBtns.forEach(b => b.classList.add('hidden'));
       // Show the install prompt
       deferredPrompt.prompt();
       // Wait for the user to respond to the prompt
@@ -268,7 +268,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
       // We've used the prompt, and can't use it again, throw it away
       deferredPrompt = null;
     });
-  }
+  });
 });
 
 // Detect iOS for manual instructions
@@ -276,16 +276,13 @@ const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
 
 if (isIOS && !isStandalone) {
-  // Optional: Show a tooltip or hint for iOS users since they don't have beforeinstallprompt
-  // For now, we leave it as the user only asked for the button logic "which works via beforeinstallprompt"
-  // But to be "nice" let's show the button but make it open instructions
-  const installBtn = document.getElementById('pwa-install-btn');
-  if (installBtn) {
-    installBtn.classList.remove('hidden');
-    installBtn.addEventListener('click', () => {
+  const installBtns = document.querySelectorAll('.pwa-install-trigger');
+  installBtns.forEach(btn => {
+    btn.classList.remove('hidden');
+    btn.addEventListener('click', () => {
       alert("To install on iOS:\n1. Tap the Share button\n2. Scroll down and tap 'Add to Home Screen'");
     });
-  }
+  });
 }
 
 // Initialize when DOM is ready

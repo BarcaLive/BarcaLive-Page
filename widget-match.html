@@ -36,10 +36,21 @@
 
         .glass-premium {
             margin: 0;
-            border-radius: 0;
+            border-radius: 20px;
+            /* Slight rounding for the widget interior if needed, or 0 if filling */
             height: 100%;
             border: none;
-            background: linear-gradient(135deg, rgba(20, 20, 25, 0.95), rgba(0, 0, 0, 0.95));
+            /* Liquid Glass Override for Widget */
+            background: rgba(20, 20, 25, 0.4);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            box-shadow: none;
+            /* Let the container handle shadow or minimal */
+        }
+
+        #widget-container {
+            padding: 10px;
+            /* Create space for the floaty liquid drop effect */
         }
 
         /* Adjust sizing for widget context */
