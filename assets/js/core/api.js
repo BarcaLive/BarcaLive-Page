@@ -143,7 +143,6 @@ class BarcaAPI {
 
     if (shouldPoll) {
       barcaState.setState('live');
-      console.log('[BarcaAPI] ⚡ Live mode active');
       this._pollTimer = setTimeout(() => {
         this.getOverview(this._currentIso);
       }, CONFIG.REFRESH_INTERVALS.matchMode);
