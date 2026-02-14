@@ -34,7 +34,6 @@ class BarcaSync {
         const isFinished = finishedStatuses.includes(newMatch.status);
 
         if (wasLive && isFinished) {
-            console.log(`[BarcaSync] Match end detected: ${oldMatch.status} -> ${newMatch.status}`);
             this._notifyWorker(newMatch);
 
             // Trigger a manual sync to Supabase to ensure final data is saved
@@ -64,7 +63,6 @@ class BarcaSync {
             const response = await fetch(`/api/sync-notify?matchId=${matchId}`);
 
             if (response.ok) {
-                console.log(`[BarcaSync] Successfully notified worker for match ${matchId}`);
                 localStorage.setItem(storageKey, 'true');
             } else {
                 console.error(`[BarcaSync] Worker notification failed with status: ${response.status}`);

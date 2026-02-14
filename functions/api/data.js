@@ -14,8 +14,7 @@ export async function onRequest(context) {
         if (!supabaseUrl || !supabaseKey) {
             console.error('[API] Missing environment variables:', {
                 hasUrl: !!supabaseUrl,
-                hasKey: !!supabaseKey,
-                keys: Object.keys(context.env || {}) // Log available keys for debugging
+                hasKey: !!supabaseKey
             });
             throw new Error('Server misconfiguration: Missing Supabase credentials');
         }
@@ -23,22 +22,25 @@ export async function onRequest(context) {
         // Use Anon Key (safe - RLS allows read-only access)
         const supabase = createClient(supabaseUrl, supabaseKey);
 
-        // Fetch matches
-        const { data: matchesData, error: matchesError } = await supabase
-            .from('barca_matches')
-            .select('*')
-            .order('utc_date', { ascending: true }); // Sort by date ascending (oldest -> newest)
+        // Fetch matches and standings in parallel to reduce latency
+        const [matchesResult, standingsResult] = await Promise.all([
+            supabase
+                .from('barca_matches')
+                .select('*')
+                .order('utc_date', { ascending: true }), // Sort by date ascending (oldest -> newest)
+            supabase
+                .from('barca_standings')
+                .select('*')
+                .order('id', { ascending: false })
+        ]);
+
+        const { data: matchesData, error: matchesError } = matchesResult;
+        const { data: standingsData, error: standingsError } = standingsResult;
 
         if (matchesError) {
             console.error('[API] Matches error:', matchesError);
             throw matchesError;
         }
-
-        // Fetch standings
-        const { data: standingsData, error: standingsError } = await supabase
-            .from('barca_standings')
-            .select('*')
-            .order('id', { ascending: false });
 
         if (standingsError) {
             console.error('[API] Standings error:', standingsError);
@@ -105,8 +107,10 @@ export async function onRequest(context) {
         const matches = (matchesData || [])
             .filter(item => item !== null)
             .map(mapMatch)
-            // Explicitly sort by date to be absolutely sure
-            .sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate));
+            // Use Schwartzian transform for efficient sorting
+            .map(m => ({ m, time: new Date(m.utcDate).getTime() }))
+            .sort((a, b) => a.time - b.time)
+            .map(({ m }) => m);
 
         const standings = (standingsData || [])
             .map(s => s.standings_data || s.data || s) // Handle the new schema (standings_data)
@@ -157,7 +161,7 @@ export async function onRequest(context) {
         return new Response(
             JSON.stringify({
                 error: 'Internal Server Error',
-                message: error.message // Temporarily include message for debugging
+                message: 'An unexpected error occurred. Please try again later.'
             }),
             {
                 status: 500,
