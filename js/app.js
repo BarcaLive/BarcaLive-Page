@@ -396,7 +396,6 @@ async function initOverview() {
     const res = await window.barcaAPI.fetchAllData();
 
     if (!res.success || !res.data) {
-        console.log('[initOverview] No data:', res.success ? 'res.data missing' : 'res.success false');
         return;
     }
 
@@ -455,8 +454,6 @@ async function initOverview() {
     // Show live match if available, otherwise show next match
     const matchToShow = liveMatch || nextMatch;
     const isLiveMatch = !!liveMatch;
-
-    console.log('[initOverview] Matches: live=', (matches.live || []).length, 'upcoming=', (matches.upcoming || []).length, 'finished=', (matches.finished || []).length, '| matchToShow:', matchToShow ? { id: matchToShow.id, homeTeam: matchToShow.homeTeam?.name || matchToShow.homeTeamId, awayTeam: matchToShow.awayTeam?.name || matchToShow.awayTeamId } : null, '| standings:', Array.isArray(standings) ? standings.length : (standings ? 'object' : 0));
 
     // Only render if we have a match
     if (matchToShow) {
@@ -536,8 +533,6 @@ function renderNextMatch(match, isLive = false, standings = []) {
 
     // Use passed isLive flag OR check status as fallback
     isLive = isLive || ['IN_PLAY', 'PAUSED', 'LIVE', 'HALFTIME'].includes(match.status);
-
-    console.log('[renderNextMatch] isLive:', isLive, 'status:', match?.status, 'match.id:', match?.id, 'homeTeam:', match?.homeTeam?.name ?? match?.homeTeamId, 'awayTeam:', match?.awayTeam?.name ?? match?.awayTeamId);
 
     // Helper to find position
     const getPosition = (teamId, teamName, currentPos) => {
@@ -1037,7 +1032,6 @@ async function renderFootballTable(container, tableData, competitionType = 'leag
 async function initSchedule(defaultView = 'upcoming') {
     const data = await API.getMatches();
     if (!data) {
-        console.log('SCHEDULE DEBUG: initSchedule – no data from API.getMatches()');
         return;
     }
 
@@ -1048,11 +1042,9 @@ async function initSchedule(defaultView = 'upcoming') {
             ...(data.matches.upcoming || []),
             ...(data.matches.finished || [])
         ];
-        console.log('SCHEDULE DEBUG: initSchedule – flattened. live:', (data.matches.live || []).length, 'upcoming:', (data.matches.upcoming || []).length, 'finished:', (data.matches.finished || []).length, 'defaultView:', defaultView);
     } else {
         window.scheduleMatches = data.matches || [];
     }
-    console.log("SCHEDULE DEBUG: Matches loaded:", window.scheduleMatches);
 
     renderScheduleList(defaultView);
 }
@@ -1107,7 +1099,6 @@ function renderScheduleList(type) {
             return (mDate < today && status !== 'NOT_STARTED' && status !== 'SCHEDULED' && status !== 'TIMED') || isFinishedStatus;
         }).sort((a, b) => new Date(b.utcDate) - new Date(a.utcDate));
     }
-    console.log(`SCHEDULE DEBUG: Filtering for ${type}. Total: ${matches.length}, Filtered: ${filtered.length}`);
 
     const container = document.getElementById('schedule-list');
 
@@ -1122,7 +1113,6 @@ function renderScheduleList(type) {
         const isHome = homeId === BARCA_ID;
         const opponent = isHome ? m.awayTeam : m.homeTeam;
         if (!opponent) {
-            console.warn('SCHEDULE DEBUG: Skipping match with missing team (id:', m.id, ')');
             return '';
         }
         const date = new Date(m.utcDate);
