@@ -1,0 +1,143 @@
+/* assets/css/layout-fixes.css */
+
+/* --- Next Match Tile Layout --- */
+#next-match-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    min-height: 280px;
+    /* Reduced from 460px */
+}
+
+/* Ensure competition logo doesn't overlap on mobile */
+#next-match-container .theme-logo {
+    object-fit: contain;
+}
+
+/* Clean up the header row on desktop */
+#next-match-container .desktop-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 1rem;
+    /* Reduced */
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+/* Better mobile spacing */
+@media (max-width: 768px) {
+    #next-match-container {
+        min-height: 320px;
+        /* Reduced */
+        justify-content: flex-start;
+        padding-top: 1rem;
+    }
+
+    #next-match-container .mobile-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+}
+
+/* Center the teams/score area */
+.match-teams-score {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 0.5rem;
+    /* Reduced gap */
+}
+
+@media (min-width: 768px) {
+    .match-teams-score {
+        gap: 3rem;
+        /* Reduced gap */
+    }
+}
+
+/* Team columns */
+.team-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 1;
+    max-width: 100px;
+    /* Reduced */
+}
+
+@media (min-width: 768px) {
+    .team-column {
+        max-width: 150px;
+    }
+}
+
+/* Score Column */
+.score-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    margin-top: -0.25rem;
+}
+
+/* Ensure visibility of sections */
+/* Ensure visibility of sections */
+#view-overview {
+    min-height: auto;
+}
+
+#active-content {
+    min-height: 500px;
+}
+
+/* Fix for potential white screen / flash */
+body {
+    background-color: #000;
+    /* Ensure black bg immediately */
+}
+
+/* Match Meta Tags (Stage, Venue, Ref) */
+.match-meta-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 0.375rem 0.75rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.75rem;
+    /* text-xs */
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
+    transition: opacity 0.2s;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.match-meta-tag:hover {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Win Prob Bar container */
+.win-prob-container {
+    width: 100%;
+    max-width: 28rem;
+    /* max-w-md */
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}

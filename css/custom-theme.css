@@ -1,0 +1,324 @@
+/**
+ * BarcaLive - Custom Theme Overrides
+ * Enhanced Islands theme with premium glassmorphism
+ */
+
+
+
+/* === Base Performance Styles === */
+html,
+body {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    font-family: 'Inter', sans-serif !important;
+    letter-spacing: -0.022em;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-transform: none !important;
+    letter-spacing: -0.05em !important;
+    font-weight: 800;
+}
+
+.theme-text-gradient {
+    background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.7) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Reserve space for icons to prevent CLS */
+[data-lucide],
+svg.lucide {
+    width: 1.25rem;
+    /* w-5 */
+    height: 1.25rem;
+    /* h-5 */
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* === Reduce Motion === */
+body.motion-reduce *,
+body.motion-reduce *::before,
+body.motion-reduce *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+}
+
+/* === Enhanced Glassmorphism === */
+.glass-premium {
+    backdrop-filter: blur(80px) saturate(2);
+    -webkit-backdrop-filter: blur(80px) saturate(2);
+    background: rgba(15, 15, 20, 0.75);
+    box-shadow:
+        0 24px 80px rgba(0, 0, 0, 0.7),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-premium:hover {
+    transform: translateY(-6px);
+    background: rgba(20, 20, 25, 0.85);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow:
+        0 40px 100px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.match-tile:hover,
+#next-match-container:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* === Table Row Hovel Effect === */
+.football-table tr {
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.football-table tr:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    transform: scale(1.01);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    position: relative;
+}
+
+/* Font Face - SF Pro Display (Local) */
+@font-face {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('Inter'), url('https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'SF Pro Display';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: local('SF Pro Display'), url('../assets/fonts/SFPRODISPLAYMEDIUM.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'SF Pro Display';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: local('SF Pro Display'), url('../assets/fonts/SFPRODISPLAYBOLD.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'SF Pro Display';
+    font-style: italic;
+    font-weight: 900;
+    font-display: swap;
+    src: local('SF Pro Display'), url('../assets/fonts/SFPRODISPLAYBLACKITALIC.woff') format('woff');
+}
+
+/* Performance Optimizations - Layout Animations */
+.island {
+    /* STRICT PERFORMANCE: No width/height transitions */
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease !important;
+    will-change: transform, opacity;
+}
+
+.island.expanded {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease !important;
+}
+
+.match-tile,
+.glass-premium,
+.glass-content {
+    transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* Ensure no height/width transition on Next Match */
+#next-match-container,
+.next-match-card {
+    transition: none !important;
+}
+
+#next-match-container {
+    position: relative;
+    min-height: 460px;
+}
+
+#next-match-container .absolute {
+    z-index: 10;
+}
+
+/* === Live Match Badge Styling === */
+.live-badge {
+    animation: livePulse 2s ease-in-out infinite;
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
+}
+
+@keyframes livePulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.85;
+        transform: scale(1.05);
+    }
+}
+
+/* === Improved Mesh Background === */
+.mesh-bg {
+    filter: blur(120px);
+    opacity: 0.4;
+    background:
+        radial-gradient(circle at 10% 20%, color-mix(in srgb, var(--maroon), transparent 50%) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, color-mix(in srgb, var(--navy), transparent 50%) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--gold), transparent 70%) 0%, transparent 50%);
+}
+
+.match-live .mesh-bg {
+    opacity: 0.6 !important;
+    animation: pulsateMesh 4s ease-in-out infinite alternate;
+}
+
+@keyframes pulsateMesh {
+    0% {
+        filter: blur(120px) brightness(1);
+    }
+
+    100% {
+        filter: blur(140px) brightness(1.3);
+    }
+}
+
+/* === Smooth Transitions for All Interactive Elements === */
+.nav-btn,
+.tab-item,
+.transmission-card,
+.match-tile {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.match-tile:hover {
+    transform: translateY(-4px);
+}
+
+/* === Match Card Live State === */
+.match-card-live {
+    box-shadow:
+        0 0 30px rgba(239, 68, 68, 0.4),
+        0 20px 50px rgba(0, 0, 0, 0.5) !important;
+    border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+/* === Loading Performance === */
+img {
+    will-change: opacity;
+}
+
+img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.4s ease-out;
+}
+
+img.loaded,
+img[loading="lazy"]:not([src=""]) {
+    opacity: 1;
+}
+
+/* === Smooth Page Transitions === */
+.page-content {
+    animation: fadeInContent 0.5s ease-out;
+}
+
+@keyframes fadeInContent {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === Enhanced Mobile Responsiveness === */
+@media (max-width: 768px) {
+    .glass-premium {
+        backdrop-filter: blur(40px) saturate(1.3);
+        -webkit-backdrop-filter: blur(40px) saturate(1.3);
+    }
+
+    #next-match-container {
+        padding-top: 1.5rem !important;
+        min-height: 460px;
+        aspect-ratio: 16 / 9;
+    }
+}
+
+/* === Theme Reactivity === */
+.theme-text {
+    color: #ffffff;
+    /* White in Dark Mode */
+    transition: color 0.3s ease;
+}
+
+body.light-theme .theme-text {
+    color: #181733;
+    /* Dark Navy in Light Mode */
+}
+
+/* Ensure glass panels in light mode are visible/distinct */
+body.light-theme .glass-premium {
+    background: rgba(255, 255, 255, 0.75);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+body.light-theme .glass-premium:hover {
+    background: rgba(255, 255, 255, 0.85);
+}
+
+/* Global Light Mode Text Overrides */
+body.light-theme h1,
+body.light-theme h2,
+body.light-theme h3,
+body.light-theme h4,
+body.light-theme h5,
+body.light-theme h6,
+body.light-theme p,
+body.light-theme li,
+body.light-theme span:not(.badge):not(.tag) {
+    color: #181733;
+}
+
+body.light-theme .text-white {
+    color: #181733 !important;
+}
+
+body.light-theme .opacity-60 {
+    opacity: 0.7;
+    /* Slightly darker for better contrast */
+}
+
+/* Exceptions */
+body.light-theme .bg-red-500,
+body.light-theme .bg-blue-500,
+body.light-theme .bg-green-500,
+body.light-theme .text-white.force-white {
+    color: #ffffff !important;
+}

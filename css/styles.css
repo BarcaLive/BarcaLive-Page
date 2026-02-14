@@ -1,0 +1,906 @@
+@import "tailwindcss";
+
+:root {
+    /* Colors - Deep Premium Dark Theme */
+    --bg-color: #000000;
+    --text-color: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.6);
+
+    /* Apple-Style Glassmorphism */
+    --glass-bg: rgba(20, 20, 25, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    /* Softer border */
+    /* 1px stroke effect */
+    --glass-highlight: rgba(255, 255, 255, 0.12);
+    /* More subtle highlight */
+    /* Top border highlight */
+    --glass-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    /* Smoother, deeper shadow */
+    --glass-blur: 50px;
+    /* Requested 50px */
+
+    /* Brand Colors */
+    --gold: #EDBB00;
+    --maroon: #A50044;
+    --navy: #004D98;
+
+    /* Layout */
+    --header-height: 60px;
+    --tab-bar-height: 60px;
+
+    /* Sufficient for 44px buttons + padding */
+    --content-max-width: 600px;
+    /* Mobile-first constraint for main content area if needed, or 100% */
+
+    /* Animation */
+    --spring-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    /* Requested soft easing */
+}
+
+body.light-theme {
+    /* Light Theme Overrides - Minimal & Clean */
+    --bg-color: #F2F2F7;
+    /* iOS System Gray 6 */
+    --text-color: #000000;
+    --text-secondary: rgba(60, 60, 67, 0.6);
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(0, 0, 0, 0.05);
+    --glass-highlight: rgba(255, 255, 255, 0.5);
+    --glass-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+/* Base */
+body {
+    font-family: 'Satoshi', 'SF Pro Display', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    /* Extra padding at bottom for Tab Bar on mobile */
+    padding-bottom: 70px;
+
+    transition: background-color 0.5s var(--spring-easing);
+}
+
+/* Fonts */
+@font-face {
+    font-family: 'Satoshi';
+    src: url('../assets/fonts/Satoshi-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url('../assets/fonts/Satoshi-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url('../assets/fonts/Satoshi-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url('../assets/fonts/Satoshi-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url('../assets/fonts/Satoshi-Black.otf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Footer - BarcaLive */
+.footer-barcalive {
+    width: 100%;
+    overflow: hidden;
+    /* Symmetric vertical spacing */
+    padding: 120px 0 120px;
+    display: flex;
+    justify-content: center;
+    background: transparent;
+    opacity: 0.15;
+    /* Enable pointer events for the link */
+    pointer-events: auto;
+    user-select: none;
+}
+
+.footer-barcalive-text {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    /* Center instead of space-between */
+    gap: 0.5vw;
+    /* Increased side padding effectively reduces max width */
+    padding: 0 5vw;
+    font-family: 'Satoshi', sans-serif;
+    font-weight: 900;
+    /* Reduced sizing */
+    font-size: clamp(40px, 15vw, 200px);
+    line-height: 0.8;
+    letter-spacing: -0.06em;
+    /* Tight tracking */
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.footer-letter {
+    display: inline-block;
+    color: var(--text-color);
+    /* No animation */
+}
+
+/* Removed hover effect */
+
+/* Ambient Mode (Match Day) */
+.match-live .mesh-bg {
+    opacity: 1 !important;
+    animation: pulsate 4s ease-in-out infinite alternate;
+}
+
+@keyframes pulsate {
+    0% {
+        filter: blur(80px) brightness(1);
+    }
+
+    100% {
+        filter: blur(100px) brightness(1.2);
+    }
+}
+
+.mesh-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+        radial-gradient(circle at 10% 20%, rgba(165, 0, 68, 0.4) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(0, 77, 152, 0.4) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(237, 187, 0, 0.15) 0%, transparent 50%);
+    filter: blur(100px);
+    opacity: 0.3;
+    /* Default quiet state */
+    transition: opacity 1s ease;
+}
+
+/* Glass Component */
+.glass-premium {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-top: 1px solid var(--glass-highlight);
+    border-radius: 24px;
+    /* Reverted to 24px for v4 fix */
+    box-shadow: var(--glass-shadow);
+    /* Removed padding: 0 to allow utility classes to work */
+    overflow: hidden;
+    transition: transform 0.3s var(--spring-easing), box-shadow 0.3s ease;
+}
+
+.glass-content {
+    padding: 24px;
+}
+
+.glass-header {
+    margin: 12px;
+    padding: 16px 24px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    /* Rounded header "tile" */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none !important;
+}
+
+body.light-theme .glass-header {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.glass-premium:active {
+    transform: scale(0.98);
+}
+
+/* Typography */
+h1,
+h2,
+h3 {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    /* Slightly looser than -0.02em for Aeonik/SF Pro */
+    margin: 0;
+}
+
+.text-secondary {
+    color: var(--text-secondary);
+}
+
+.bg-live-win {
+    background: linear-gradient(135deg, #166534, #15803d) !important;
+    color: white !important;
+}
+
+.bg-live-draw {
+    background: linear-gradient(135deg, #4b5563, #374151) !important;
+    color: white !important;
+}
+
+.bg-live-loss {
+    background: linear-gradient(135deg, #991b1b, #b91c1c) !important;
+    color: white !important;
+}
+
+.bg-live-neutral {
+    background: #000;
+}
+
+
+
+/* Dynamic Island */
+.island-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    user-select: none;
+}
+
+
+
+.island {
+    background: #000;
+    border-radius: 100px;
+    transition: all 0.6s var(--spring-easing);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    /* Initial State */
+    width: 120px;
+    height: 36px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    /* Ensure text is white in dark mode/default */
+}
+
+body.light-theme .island {
+    background: #ffffff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    color: #000;
+}
+
+body.light-theme .island span {
+    color: #000 !important;
+}
+
+body.light-theme .island .text-gold {
+    color: #b08d00 !important;
+}
+
+
+.island.expanded {
+    width: 360px;
+    height: 80px;
+    border-radius: 44px;
+    padding: 0 16px;
+}
+
+/* Navigation - Mobile Tab Bar */
+.tab-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--tab-bar-height);
+    background: rgba(20, 20, 25, 0.7);
+    /* More transparent */
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    /* Centered Bug 2c */
+    z-index: 1000;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+
+body.light-theme .tab-bar {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+
+.tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: 500;
+    width: 64px;
+    transition: color 0.2s ease;
+}
+
+.tab-item svg {
+    width: 28px;
+    height: 28px;
+    stroke-width: 2px;
+    transition: transform 0.2s var(--spring-easing);
+}
+
+.tab-item.active {
+    color: var(--text-color);
+}
+
+.tab-item.active svg {
+    transform: translateY(-2px);
+    stroke: var(--gold);
+    /* Highlight color */
+}
+
+@media (min-width: 769px) {
+    .desktop-nav {
+        display: flex;
+    }
+
+    .tab-bar {
+        display: none;
+    }
+}
+
+
+
+/* Animations */
+.animate-in {
+    animation: staggerReveal 0.6s var(--spring-easing) forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+@keyframes staggerReveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Helper Classes */
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.h-full {
+    height: 100%;
+}
+
+.text-xs {
+    font-size: 12px;
+}
+
+.text-sm {
+    font-size: 14px;
+}
+
+.text-lg {
+    font-size: 18px;
+}
+
+.text-xl {
+    font-size: 24px;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.opacity-50 {
+    opacity: 0.5;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.tracking-widest {
+    letter-spacing: 0.1em;
+}
+
+.text-gold {
+    color: var(--gold);
+}
+
+.text-red {
+    color: #FF3B30;
+}
+
+/* Tables */
+.table-wrapper,
+.overflow-x-auto {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    border-radius: 16px;
+}
+
+.football-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.football-table th {
+    text-align: left;
+    padding: 18px 16px;
+    font-size: 11px;
+    /* Increased from 10px */
+    font-weight: 700;
+    /* Apple style bold but not heavy */
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    /* Reduced from 0.15em */
+    color: var(--text-secondary);
+    opacity: 0.6;
+    /* Increased contrast slightly */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.football-table td {
+    padding: 20px 16px;
+    font-weight: 500;
+    white-space: nowrap;
+    /* Prevent wrapping */
+    font-size: 16px;
+    /* Apple-style readable size */
+}
+
+.football-table tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: all 0.3s ease;
+}
+
+.football-table tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.football-table tr:last-child {
+    border-bottom: none;
+}
+
+/* Glow for Barca */
+.highlight-barca {
+    background: rgba(237, 187, 0, 0.04) !important;
+}
+
+.highlight-barca td {
+    border-bottom-color: rgba(237, 187, 0, 0.1);
+}
+
+.highlight-barca img {
+    /* Crest */
+    filter: drop-shadow(0 0 8px rgba(165, 0, 68, 0.6));
+    /* Red glow */
+}
+
+/* Toggle Pill - iOS Native Style */
+.pill-toggle {
+    background: rgba(118, 118, 128, 0.24);
+    padding: 3px;
+    border-radius: 12px;
+    display: inline-flex;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pill-toggle .option {
+    padding: 8px 32px;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 10px;
+    color: var(--text-color);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.6;
+}
+
+.pill-toggle .option.active {
+    background: var(--text-color);
+    color: var(--bg-color);
+    opacity: 1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: scale(1.05);
+    /* Slight pop */
+}
+
+/* Improvement 2: Smooth Toggle Animations */
+.pill-toggle .option {
+    transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    /* Bouncy iOS feel */
+    position: relative;
+    z-index: 1;
+}
+
+.pill-toggle .option:not(.active):active {
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+
+
+
+
+/* Prediction Bar (Apple Health Style) */
+.prediction-bar-container {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    margin-top: 16px;
+}
+
+
+.pred-segment {
+    height: 100%;
+    transition: width 1s var(--spring-easing);
+}
+
+.pred-home {
+    background: var(--maroon);
+}
+
+.pred-draw {
+    background: var(--text-secondary);
+    opacity: 0.3;
+}
+
+.pred-away {
+    background: var(--navy);
+}
+
+/* Settings Menu Styles - Centered Glass Modal */
+.settings-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(25px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.settings-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.settings-menu {
+    width: 100%;
+    max-width: 380px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-top: 1px solid var(--glass-highlight);
+    border-radius: 40px;
+    padding: 32px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    transform: translateY(20px);
+    transition: transform 0.4s var(--spring-easing);
+}
+
+.settings-overlay.active .settings-menu {
+    transform: translateY(0);
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.setting-item:last-child {
+    border-bottom: none;
+}
+
+/* Mobile & Tablet Overhaul - Premium Scaling */
+@media (max-width: 768px) {
+    :root {
+        --tab-bar-height: 60px;
+    }
+
+
+    body {
+        padding: 16px;
+        /* slightly more room */
+        padding-bottom: 80px;
+    }
+
+
+    /* Scaling Typography */
+    h1 {
+        font-size: 3.2rem !important;
+        line-height: 0.9;
+        letter-spacing: -0.05em;
+    }
+
+    .text-5xl,
+    .text-7xl {
+        font-size: 3.2rem !important;
+    }
+
+    /* Table Enhancements for Small Screens */
+    .football-table td,
+    .football-table th {
+        padding: 16px 12px;
+        font-size: 15px;
+        /* Larger on mobile */
+    }
+
+    .football-table img {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    .glass-premium {
+        border-radius: 24px;
+    }
+
+    .glass-header {
+        margin: 8px;
+        padding: 12px 16px;
+        border-radius: 18px;
+    }
+
+    .glass-content {
+        padding: 16px;
+    }
+
+    /* Dynamic Island Mobile Adjustments */
+    .island.expanded {
+        width: calc(100vw - 32px);
+        max-width: 400px;
+        height: 72px;
+        border-radius: 36px;
+    }
+
+    /* Tab Bar Scaling */
+    .tab-bar {
+        display: flex !important;
+        height: 60px;
+        padding: 6px 0;
+        margin: 0;
+        width: 100%;
+        border-radius: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        transform: none;
+    }
+
+    .tab-item {
+        width: 20%;
+        gap: 2px;
+    }
+
+
+    .tab-item span {
+        font-size: 12px;
+    }
+
+
+    .tab-item svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Prediction Fix on Mobile */
+    .prediction-bar-container+div {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 4px;
+        text-align: left;
+        font-size: 11px !important;
+        opacity: 0.8 !important;
+    }
+
+
+    /* Force mobile layout for grids & centering (Bug 2d) */
+    .md\:col-span-8,
+    .md\:col-span-4,
+    .md\:col-span-12 {
+        grid-column: span 1 / span 1 !important;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* U1: Hide top navigation on mobile */
+    header,
+    .navbar,
+    .top-nav,
+    .header-nav {
+        display: none !important;
+    }
+
+    /* Adjust main content starting point */
+    main {
+        margin-top: 1.5rem !important;
+    }
+
+    /* Ensure Dynamic Island is visible and centered */
+    .island-container {
+        top: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    #next-match-container .flex-row {
+        flex-direction: column !important;
+        gap: 2rem !important;
+    }
+
+    .flex-row {
+        flex-direction: column !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .items-end {
+        align-items: center !important;
+    }
+
+    .text-left {
+        text-align: center !important;
+    }
+}
+
+/* Progressive Enhancement & Glassmorphism Fallbacks */
+
+@supports not (backdrop-filter: blur(10px)) {
+
+    .glass-premium,
+    .tab-bar,
+    .settings-overlay {
+        background: rgba(15, 15, 20, 0.95) !important;
+    }
+
+    body.light-theme .glass-premium,
+    body.light-theme .tab-bar {
+        background: rgba(255, 255, 255, 0.95) !important;
+    }
+}
+
+/* Touch targets & optimizations */
+@media (hover: none) {
+
+    .nav-btn,
+    .tab-item,
+    .pill-toggle .option,
+    .transmission-card {
+        cursor: default;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .nav-btn:active,
+    .tab-item:active,
+    .transmission-card:active {
+        opacity: 0.7;
+        transform: scale(0.98);
+    }
+}
+
+/* --- TRANSMISSIONS / WHERE TO WATCH --- */
+.transmission-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+.transmission-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px);
+}
+
+.channel-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top: 3px solid var(--gold);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 2rem auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-pulse-slow {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .5;
+    }
+}
+
+/* SPA Transitions */
+.spa-fade-in {
+    opacity: 1;
+    transition: opacity 200ms ease-in-out;
+}
+
+.spa-fade-out {
+    opacity: 0;
+    transition: opacity 200ms ease-in-out;
+}

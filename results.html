@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://api.barcalive.online">
+    <link rel="preconnect" href="https://fonts.cdnfonts.com">
+    <title>BarcaLive | Results</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles_final.css">
+    <link rel="stylesheet" href="css/main-min.css">
+    <link rel="icon" type="image/png" href="/assets/favicons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicons/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/favicons/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="BarcaLive" />
+    <link rel="manifest" href="/assets/favicons/site.webmanifest" />
+</head>
+
+
+<body class="p-6 md:p-12">
+    <div class="mesh-background"></div>
+
+    <div class="noise-overlay"></div>
+    <div class="mesh-bg"></div>
+    <div id="dynamic-island" class="dynamic-island"></div>
+
+
+    <main id="app-content" data-init="initResultsPage" class="max-w-4xl mx-auto mt-32">
+        <header class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+            <div>
+                <h1 class="text-5xl md:text-7xl font-bold tracking-tighter" data-i18n="schedule">Schedule</h1>
+            </div>
+            <div id="header-nav"></div>
+        </header>
+
+        <!-- Tabs: iOS Pill Style -->
+        <div class="flex justify-center mb-10">
+            <div class="pill-toggle">
+                <div id="tab-upcoming" onclick="switchScheduleTab('upcoming')" class="option" data-i18n="upcoming">
+                    Upcoming</div>
+                <div id="tab-results" onclick="switchScheduleTab('results')" class="option active" data-i18n="results">
+                    Results
+                </div>
+            </div>
+        </div>
+
+        <section id="schedule-list" class="flex flex-col min-h-[400px]">
+            <!-- Content injected via app.js -->
+        </section>
+    </main>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/components.js"></script>
+    <script src="assets/js/main.js" type="module"></script>
+</body>
+
+</html>

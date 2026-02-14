@@ -1,0 +1,14 @@
+{
+  "version": 0,
+  "downloadUrl": "/app/BarcaLive.apk",
+  "appName": {
+    "en": "BarcaLive Mobile App",
+    "pl": "Aplikacja mobilna BarcaLive",
+    "de": "BarcaLive Mobile App"
+  },
+  "description": {
+    "en": "Experience BarcaLive on your mobile device. Faster, smoother, and with push notifications.",
+    "pl": "Pobierz BarcaLive na swój telefon. Szybciej, płynniej i z powiadomieniami push.",
+    "de": "Erlebe BarcaLive auf deinem Mobilgerät. Schneller, reibungsloser und mit Push-Benachrichtigungen."
+  }
+}

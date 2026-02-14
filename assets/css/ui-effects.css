@@ -1,0 +1,234 @@
+/**
+ * BarcaLive UI Effects & Animations
+ * Apple-style premium visual layer.
+ */
+
+:root {
+  --mesh-color-1: #1a1a2e;
+  --mesh-speed: 10s;
+  --skeleton-base: rgba(255, 255, 255, 0.05);
+  --skeleton-highlight: rgba(255, 255, 255, 0.1);
+}
+
+body.light-theme {
+  --mesh-color-1: #e2e8f0;
+  /* Light Slate */
+  --skeleton-base: rgba(0, 0, 0, 0.05);
+  --skeleton-highlight: rgba(0, 0, 0, 0.1);
+}
+
+/* --- Ambient Mesh Background --- */
+.mesh-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(circle at 30% 50%, var(--mesh-color-1) 0%, transparent 50%);
+  transition: background 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: background;
+}
+
+
+
+/* --- Utility Animations --- */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  will-change: opacity;
+}
+
+.fade-out {
+  opacity: 1;
+  animation: fadeOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  will-change: opacity;
+}
+
+.slide-in-left {
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: slideInLeft 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+  will-change: opacity, transform;
+}
+
+.pulse {
+  animation: pulseEffect 2s infinite;
+  will-change: transform;
+}
+
+.shake {
+  animation: shakeEffect 0.5s cubic-bezier(.36, .07, .19, .97) both;
+  will-change: transform;
+}
+
+.bounce {
+  animation: bounceEffect 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
+  will-change: transform;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideInLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulseEffect {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes shakeEffect {
+
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+@keyframes bounceEffect {
+
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-10px);
+  }
+
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes liveGlowWin {
+
+  0%,
+  100% {
+    box-shadow: 0 8px 30px rgba(34, 197, 94, 0.3), 0 0 20px rgba(34, 197, 94, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 8px 40px rgba(34, 197, 94, 0.5), 0 0 30px rgba(34, 197, 94, 0.4);
+  }
+}
+
+@keyframes liveGlowLoss {
+
+  0%,
+  100% {
+    box-shadow: 0 8px 30px rgba(239, 68, 68, 0.3), 0 0 20px rgba(239, 68, 68, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 8px 40px rgba(239, 68, 68, 0.5), 0 0 30px rgba(239, 68, 68, 0.4);
+  }
+}
+
+@keyframes liveGlowDraw {
+
+  0%,
+  100% {
+    box-shadow: 0 8px 30px rgba(234, 179, 8, 0.3), 0 0 20px rgba(234, 179, 8, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 8px 40px rgba(234, 179, 8, 0.5), 0 0 30px rgba(234, 179, 8, 0.4);
+  }
+}
+
+.island.is-live.bg-live-win {
+  animation: liveGlowWin 2s ease-in-out infinite;
+}
+
+.island.is-live.bg-live-loss {
+  animation: liveGlowLoss 2s ease-in-out infinite;
+}
+
+.island.is-live.bg-live-draw {
+  animation: liveGlowDraw 2s ease-in-out infinite;
+}
+
+.island.is-live.bg-live-neutral {
+  animation: liveGlowDraw 2s ease-in-out infinite;
+}
+
+/* --- Accessibility --- */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  ::before,
+  ::after {
+    animation-delay: -1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    background-attachment: initial !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+  }
+}
+
+/* --- Standings Position Highlights --- */
+.pos-cl {
+  background: linear-gradient(90deg, rgba(34, 197, 94, 0.15) 0%, transparent 100%);
+  border-left: 2px solid #22c55e;
+}
+
+.pos-el {
+  background: linear-gradient(90deg, rgba(234, 179, 8, 0.15) 0%, transparent 100%);
+  border-left: 2px solid #eab308;
+}
+
+.pos-ecl {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, transparent 100%);
+  border-left: 2px solid #10b981;
+}
+
+.pos-rel {
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.15) 0%, transparent 100%);
+  border-left: 2px solid #ef4444;
+}
