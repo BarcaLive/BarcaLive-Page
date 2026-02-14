@@ -109,23 +109,34 @@ body {
 .footer-barcalive {
     width: 100%;
     overflow: hidden;
-    padding: 4rem 0 8rem;
+    /* Symmetric vertical spacing */
+    padding: 120px 0 120px;
     display: flex;
     justify-content: center;
     background: transparent;
     opacity: 0.15;
-    pointer-events: none;
+    /* Enable pointer events for the link */
+    pointer-events: auto;
     user-select: none;
 }
 
 .footer-barcalive-text {
     display: flex;
+    width: 100%;
+    justify-content: space-between;
+    /* Spread across full width */
+    padding: 0 4vw;
+    /* Slight padding from edges */
     font-family: 'Satoshi', sans-serif;
     font-weight: 900;
-    font-size: clamp(100px, 18vw, 300px);
+    /* Increased sizing for "wider" feel */
+    font-size: clamp(60px, 16vw, 240px);
     line-height: 0.8;
-    letter-spacing: -0.06em;
+    letter-spacing: -0.04em;
     text-transform: uppercase;
+    text-decoration: none;
+    /* Remove link underline */
+    cursor: pointer;
 }
 
 .footer-letter {
@@ -135,8 +146,11 @@ body {
 }
 
 .footer-letter:hover {
-    transform: translateY(-20px);
-    opacity: 0.8;
+    transform: translateY(-20px) scale(1.1);
+    opacity: 1;
+    /* Brighten on hover */
+    color: var(--gold);
+    /* Optional: add brand color on hover */
 }
 
 /* Ambient Mode (Match Day) */

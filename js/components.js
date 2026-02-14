@@ -56,7 +56,7 @@ const Components = {
 
     footer: () => `
         <footer class="footer-barcalive">
-            <div class="footer-barcalive-text">
+            <a href="https://ko-fi.com/barcalive" target="_blank" rel="noopener noreferrer" class="footer-barcalive-text">
                 <span class="footer-letter" style="transition-delay: 0ms">B</span>
                 <span class="footer-letter" style="transition-delay: 50ms">A</span>
                 <span class="footer-letter" style="transition-delay: 100ms">R</span>
@@ -66,7 +66,7 @@ const Components = {
                 <span class="footer-letter" style="transition-delay: 300ms">I</span>
                 <span class="footer-letter" style="transition-delay: 350ms">V</span>
                 <span class="footer-letter" style="transition-delay: 400ms">E</span>
-            </div>
+            </a>
         </footer>
     `,
 
