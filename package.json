@@ -1,10 +1,12 @@
 {
   "name": "barcalive",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "build:styles": "npx @tailwindcss/cli@latest -i ./css/styles.css -o ./css/styles_final.css --minify --watch",
     "build": "npx @tailwindcss/cli@latest -i ./css/styles.css -o ./css/styles_final.css --minify",
-    "pages:build": "npm run build"
+    "pages:build": "npm run build",
+    "test": "node --test assets/js/core/utils.test.js"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.23",

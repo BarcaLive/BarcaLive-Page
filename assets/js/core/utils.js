@@ -5,15 +5,15 @@
 /**
  * Formats match time from ISO string or returns live status
  * @param {string} isoString - ISO date string of the match
+ * @param {Date} [now=new Date()] - Optional current date for testing
  * @returns {string} Formatted time (e.g., "21:00") or "LIVE 67'"
  */
-export const formatMatchTime = (isoString) => {
+export const formatMatchTime = (isoString, now = new Date()) => {
   if (!isoString) return "";
   const date = new Date(isoString);
 
   if (isNaN(date.getTime())) return isoString;
 
-  const now = new Date();
   const diffMs = now - date;
   const diffMins = Math.floor(diffMs / 60000);
 
