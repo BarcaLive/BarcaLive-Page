@@ -707,10 +707,18 @@ function renderScheduleList(type) {
 
   let filtered;
   if (type === 'upcoming') {
-    const upcoming = (matches.upcoming || []).sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+    // Optimized: Map-Sort-Map for upcoming matches
+    const upcoming = (matches.upcoming || [])
+      .map(m => ({ item: m, time: new Date(m.startTime).getTime() }))
+      .sort((a, b) => a.time - b.time)
+      .map(({ item }) => item);
     filtered = (matches.live || []).concat(upcoming);
   } else {
-    filtered = (matches.finished || []).sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
+    // Optimized: Map-Sort-Map for finished matches (descending)
+    filtered = (matches.finished || [])
+      .map(m => ({ item: m, time: new Date(m.startTime).getTime() }))
+      .sort((a, b) => b.time - a.time)
+      .map(({ item }) => item);
   }
 
   const container = document.getElementById('schedule-list');
