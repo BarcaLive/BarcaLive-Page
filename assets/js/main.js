@@ -212,11 +212,11 @@ async function checkAppVersion() {
 }
 
 function showAppPromo(config) {
-  const lang = 'pl'; // Strict Polish
-  const appName = typeof config.appName === 'object' ? (config.appName['pl'] || config.appName) : config.appName;
-  const description = config.description['pl'] || config.description;
-  const downloadBtn = 'Pobierz';
-  const closeBtn = 'Może później';
+  const lang = window.I18n ? window.I18n.currentLang : 'pl';
+  const appName = typeof config.appName === 'object' ? (config.appName[lang] || config.appName['pl'] || config.appName) : config.appName;
+  const description = typeof config.description === 'object' ? (config.description[lang] || config.description['pl'] || config.description) : config.description;
+  // Determine button text: "Zainstaluj" (Install) instead of "Pobierz" (Download) if PWA
+  const installText = window.I18n ? window.I18n.t('install') : 'Zainstaluj';
 
   const overlay = document.createElement('div');
   overlay.id = 'app-promo-overlay';
@@ -231,9 +231,9 @@ function showAppPromo(config) {
             <p class="text-white/60 text-sm leading-relaxed mb-8">${description}</p>
 
             <div class="flex flex-col gap-3">
-                <a href="${config.downloadUrl}" class="bg-white text-black py-4 rounded-2xl font-bold hover:scale-105 transition-transform">
-                    ${downloadBtn}
-                </a>
+                <button id="promo-install-btn" class="bg-white text-black py-4 rounded-2xl font-bold hover:scale-105 transition-transform w-full">
+                    ${installText}
+                </button>
                 <button onclick="document.getElementById('app-promo-overlay').remove()" class="text-white/40 text-xs font-bold uppercase tracking-widest py-2 hover:text-white transition-colors">
                     ${closeBtn}
                 </button>
@@ -243,6 +243,28 @@ function showAppPromo(config) {
 
   document.body.appendChild(overlay);
   if (window.lucide) window.lucide.createIcons();
+
+  // Attach PWA Install Logic
+  document.getElementById('promo-install-btn').addEventListener('click', async () => {
+    // Check if we have a deferred prompt (Android/Desktop)
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`User response to the install prompt: ${outcome}`);
+      deferredPrompt = null;
+      document.getElementById('app-promo-overlay').remove();
+    }
+    // Fallback for iOS (manual instructions)
+    else if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+      alert("Aby zainstalować aplikację: \n1. Kliknij przycisk Udostępnij ⍈\n2. Wybierz 'Dodaj do ekranu początkowego' ➕");
+      document.getElementById('app-promo-overlay').remove();
+    }
+    // Fallback if already installed or not supported
+    else {
+      console.log('PWA installation not available or already installed.');
+      document.getElementById('app-promo-overlay').remove();
+    }
+  });
 }
 
 // ── PWA Install Logic ────────────────────────────────────────────────

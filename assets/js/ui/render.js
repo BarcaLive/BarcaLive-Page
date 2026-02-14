@@ -501,6 +501,7 @@ function renderTransmissions(channels) {
 
     return `
       <div class="glass-premium flex flex-col items-center justify-center p-6 text-center transition-all duration-300 ${cursorClass}"
+           style="border-radius: 20px; border: 1px solid rgba(255,255,255,0.08);"
            ${clickAttr}>
          <div class="mb-2 opacity-80">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="theme-text"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>

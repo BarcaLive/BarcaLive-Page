@@ -59,7 +59,10 @@ const translations = {
         europaLeague: "Liga Europy",
         conferenceLeague: "Liga Konferencji",
         relegation: "Spadek",
-        promotion: "Awans"
+        promotion: "Awans",
+        download: "Pobierz",
+        maybeLater: "Może później",
+        install: "Zainstaluj"
     },
     en: {
         matches: "Matches",
@@ -121,7 +124,10 @@ const translations = {
         europaLeague: "Europa League",
         conferenceLeague: "Conference League",
         relegation: "Relegation",
-        promotion: "Promotion"
+        promotion: "Promotion",
+        download: "Download",
+        maybeLater: "Maybe later",
+        install: "Install"
     },
     es: {
         matches: "Partidos",
@@ -183,7 +189,10 @@ const translations = {
         europaLeague: "Liga Europa",
         conferenceLeague: "Liga Conferencia",
         relegation: "Descenso",
-        promotion: "Ascenso"
+        promotion: "Ascenso",
+        download: "Descargar",
+        maybeLater: "Quizás más tarde",
+        install: "Instalar"
     },
     de: {
         matches: "Spiele",
@@ -245,7 +254,10 @@ const translations = {
         europaLeague: "Europa League",
         conferenceLeague: "Conference League",
         relegation: "Abstieg",
-        promotion: "Aufstieg"
+        promotion: "Aufstieg",
+        download: "Herunterladen",
+        maybeLater: "Vielleicht später",
+        install: "Installieren"
     },
     fr: {
         matches: "Matchs",
@@ -303,7 +315,10 @@ const translations = {
         europaLeague: "Ligue Europa",
         conferenceLeague: "Ligue Conférence",
         relegation: "Relégation",
-        promotion: "Promotion"
+        promotion: "Promotion",
+        download: "Télécharger",
+        maybeLater: "Peut-être plus tard",
+        install: "Installer"
     }
 };
 
@@ -418,6 +433,12 @@ const I18n = {
         document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
             const key = el.getAttribute('data-i18n-placeholder');
             if (key) el.placeholder = this.t(key);
+        });
+
+        // Translate titles
+        document.querySelectorAll('[data-i18n-title]').forEach(el => {
+            const key = el.getAttribute('data-i18n-title');
+            if (key) el.title = this.t(key);
         });
     }
 };

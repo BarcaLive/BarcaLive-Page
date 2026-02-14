@@ -4,11 +4,15 @@
   "appName": {
     "en": "BarcaLive Mobile App",
     "pl": "Aplikacja mobilna BarcaLive",
-    "de": "BarcaLive Mobile App"
+    "de": "BarcaLive Mobile App",
+    "es": "Aplicación Móvil BarcaLive",
+    "fr": "Application Mobile BarcaLive"
   },
   "description": {
     "en": "Experience BarcaLive on your mobile device. Faster, smoother, and with push notifications.",
     "pl": "Pobierz BarcaLive na swój telefon. Szybciej, płynniej i z powiadomieniami push.",
-    "de": "Erlebe BarcaLive auf deinem Mobilgerät. Schneller, reibungsloser und mit Push-Benachrichtigungen."
+    "de": "Erlebe BarcaLive auf deinem Mobilgerät. Schneller, reibungsloser und mit Push-Benachrichtigungen.",
+    "es": "Experimenta BarcaLive en tu dispositivo móvil. Más rápido, más fluido y con notificaciones push.",
+    "fr": "Découvrez BarcaLive sur votre mobile. Plus rapide, plus fluide et avec des notifications push."
   }
 }
