@@ -149,6 +149,11 @@ body {
 /* Removed hover effect */
 
 /* Ambient Mode (Match Day) */
+body.light-theme .mesh-bg,
+body.light-theme .mesh-background {
+    display: none !important;
+}
+
 .match-live .mesh-bg {
     opacity: 1 !important;
     animation: pulsate 4s ease-in-out infinite alternate;

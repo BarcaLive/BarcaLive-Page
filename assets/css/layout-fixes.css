@@ -102,10 +102,7 @@
 }
 
 /* Fix for potential white screen / flash */
-body {
-    background-color: #000;
-    /* Ensure black bg immediately */
-}
+/* Removed hardcoded black background to allow theme switching */
 
 /* Match Meta Tags (Stage, Venue, Ref) */
 .match-meta-tag {
@@ -125,9 +122,19 @@ body {
     max-width: 100%;
 }
 
+body.light-theme .match-meta-tag {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.05);
+    color: rgba(0, 0, 0, 0.6);
+}
+
 .match-meta-tag:hover {
     opacity: 1;
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.light-theme .match-meta-tag:hover {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 /* Win Prob Bar container */

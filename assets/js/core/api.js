@@ -34,15 +34,16 @@ class BarcaAPI {
    * @param {string} [iso] - Country code for TV stations (default: local or PL)
    */
   async getOverview(iso) {
-    // Use user's saved ISO or passed ISO or detect from browser
-    let userIso = iso || localStorage.getItem('bp_region');
+    // 1. Use passed ISO if available
+    let userIso = iso;
 
+    // 2. If no ISO passed, detect from browser (ALWAYS try detection to respect headers)
     if (!userIso) {
       try {
         const navLang = navigator.language || navigator.userLanguage;
         if (navLang) {
           // Extract region if present (e.g. "pl-PL" -> "PL", "en-GB" -> "GB")
-          // If just "pl" -> "PL"
+          // If just "pl" -> "PL" (technically language code, but often used as region fallback)
           if (navLang.includes('-')) {
             userIso = navLang.split('-')[1].toUpperCase();
           } else {
@@ -52,15 +53,12 @@ class BarcaAPI {
       } catch (e) { console.warn('[BarcaAPI] ISO detection failed', e); }
     }
 
-    // Default to empty string if detection returned nothing or failed
-    // This ensures we don't show Polish TV (PL) to users who aren't in PL or detected regions
-    userIso = userIso || 'PL'; // FALLBACK TO PL IF DETECTION FAILS (Better UX than nothing)
+    // 3. Fallback to 'PL' only if detection failed
+    userIso = userIso || 'PL';
     this._currentIso = userIso;
 
-    // PERSIST DETECTED REGION
-    if (!localStorage.getItem('bp_region')) {
-      localStorage.setItem('bp_region', userIso);
-    }
+    // PERSIST DETECTED REGION (for other parts of app, but we don't prioritize it over fresh detection)
+    localStorage.setItem('bp_region', userIso);
 
     const endpoint = `${CONFIG.ENDPOINTS.matches}&iso=${userIso}`;
 
