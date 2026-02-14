@@ -47,6 +47,6 @@ export async function onRequest(context) {
 
   } catch (error) {
     console.error('[Sync Notify] Error:', error.message);
-    return new Response('Error triggering sync: ' + error.message, { status: 500 });
+    return new Response('An error occurred while triggering sync.', { status: 500 });
   }
 }

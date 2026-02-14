@@ -36,8 +36,9 @@ export async function onRequest(context) {
         });
 
     } catch (error) {
+        console.error('[API] Trigger Sync Error:', error.message);
         return new Response(
-            JSON.stringify({ error: error.message }),
+            JSON.stringify({ error: 'An error occurred while triggering sync.' }),
             {
                 status: 500,
                 headers: { 'Content-Type': 'application/json' }

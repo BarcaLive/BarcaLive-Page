@@ -157,7 +157,7 @@ export async function onRequest(context) {
         return new Response(
             JSON.stringify({
                 error: 'Internal Server Error',
-                message: error.message // Temporarily include message for debugging
+                message: 'An unexpected error occurred. Please try again later.'
             }),
             {
                 status: 500,
