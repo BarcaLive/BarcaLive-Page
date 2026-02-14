@@ -4,7 +4,20 @@
 /sw.js
   Cache-Control: no-cache, no-store, must-revalidate
 
-/assets/*
+/manifest.json
+  Cache-Control: public, max-age=0, must-revalidate
+
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Long-term cache for immutable/versioned assets
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/favicons/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/css/*
   Cache-Control: public, max-age=31536000, immutable
 
 /css/*
@@ -13,8 +26,6 @@
 /js/*
   Cache-Control: public, max-age=31536000, immutable
 
-/*.html
-  Cache-Control: public, max-age=0, must-revalidate
-
-/manifest.json
+# JS Modules (safe revalidation due to deep imports)
+/assets/js/*
   Cache-Control: public, max-age=0, must-revalidate

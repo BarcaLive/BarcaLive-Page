@@ -101,7 +101,7 @@ export function getTeamCrestUrl(teamId) {
  * Team crest URL — pass-through for legacy code that already has the URL.
  */
 export function getTeamLogoUrl(crestUrl) {
-    return crestUrl || '';
+    return withSupabaseImageTransform(crestUrl, { width: 96, height: 96, quality: 70, format: 'webp' });
 }
 
 /**
@@ -110,7 +110,8 @@ export function getTeamLogoUrl(crestUrl) {
  */
 export function getChannelLogoUrl(channelName) {
     const file = CHANNEL_LOGO_MAP[channelName];
-    return file ? `${STORAGE}/channel/${file}` : '';
+    const url = file ? `${STORAGE}/channel/${file}` : '';
+    return withSupabaseImageTransform(url, { width: 100, height: 100 });
 }
 
 /**
@@ -132,5 +133,6 @@ export function getCompetitionLogoUrl(name, theme = 'dark') {
         else if (name.includes('Super')) code = 'scde';
     }
 
-    return code ? `${STORAGE}/competition/${code}-${theme}.webp` : '';
+    const url = code ? `${STORAGE}/competition/${code}-${theme}.webp` : '';
+    return withSupabaseImageTransform(url, { width: 96, height: 96 });
 }

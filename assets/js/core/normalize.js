@@ -8,7 +8,7 @@
  *       exact same flat structure so renderers never need fallback chains.
  */
 
-import { getTeamCrestUrl } from './assets.js';
+import { getTeamCrestUrl, getTeamLogoUrl } from './assets.js';
 
 /* ─── Single-match normalizer ──────────────────────────────────────── */
 
@@ -21,7 +21,7 @@ function normalizeMatch(raw) {
         id: nested?.id ?? null,
         name: nested?.name || flatName || 'TBD',
         shortName: nested?.shortName || nested?.name || flatName || 'TBD',
-        crest: nested?.crest || flatCrest || (nested?.id ? getTeamCrestUrl(nested.id) : ''),
+        crest: getTeamLogoUrl(nested?.crest || flatCrest) || (nested?.id ? getTeamCrestUrl(nested.id) : ''),
     });
 
     // Handle v2 'home'/'away' or v1 'homeTeam'/'awayTeam'

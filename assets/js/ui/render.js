@@ -239,7 +239,7 @@ function renderNextMatch(match, isLive, standings) {
         <div class="flex items-center gap-3">
              <div class="w-12 h-12 md:w-14 md:h-14 bg-white/5 rounded-[18px] flex items-center justify-center border border-white/10 shadow-lg backdrop-blur-md shrink-0">
                 <img src="${compLogo}" class="w-8 h-8 md:w-9 md:h-9 object-contain filter drop-shadow-md theme-logo no-animate" 
-                     data-code="${compType}" alt="${compName}" loading="lazy">
+                     data-code="${compType}" alt="${compName}" loading="lazy" width="36" height="36">
              </div>
              <div class="flex flex-col min-w-0">
                 <span class="text-[10px] md:text-[11px] font-black uppercase tracking-widest opacity-60 theme-text truncate">${compName}</span>
@@ -273,7 +273,7 @@ function renderNextMatch(match, isLive, standings) {
         <div class="team-column group flex-1 flex flex-col items-center justify-center min-w-0">
              <div class="w-16 h-16 md:w-32 md:h-32 bg-white/5 rounded-[20px] md:rounded-[40px] flex items-center justify-center border border-white/10 mb-2 md:mb-3 mx-auto shadow-xl transition-all"
                   style="box-shadow:0 0 30px ${homeColor}20;">
-                <img src="${match.homeTeam.crest}" alt="${homeName}" class="w-10 h-10 md:w-20 md:h-20 object-contain no-animate">
+                <img src="${match.homeTeam.crest}" alt="${homeName}" class="w-10 h-10 md:w-20 md:h-20 object-contain no-animate" fetchpriority="high" width="80" height="80">
              </div>
              <h2 class="font-bold text-sm md:text-2xl theme-text leading-tight whitespace-nowrap truncate w-full text-center px-1">
                 ${homeName}
@@ -294,7 +294,7 @@ function renderNextMatch(match, isLive, standings) {
         <!-- Away Team -->
         <div class="team-column group flex-1 flex flex-col items-center justify-center min-w-0">
              <div class="w-16 h-16 md:w-32 md:h-32 bg-white/5 rounded-[20px] md:rounded-[40px] flex items-center justify-center border border-white/10 mb-2 md:mb-3 mx-auto shadow-xl transition-all">
-                <img src="${match.awayTeam.crest}" alt="${awayName}" class="w-10 h-10 md:w-20 md:h-20 object-contain no-animate">
+                <img src="${match.awayTeam.crest}" alt="${awayName}" class="w-10 h-10 md:w-20 md:h-20 object-contain no-animate" fetchpriority="high" width="80" height="80">
              </div>
              <h2 class="font-bold text-sm md:text-2xl theme-text leading-tight whitespace-nowrap truncate w-full text-center px-1">
                 ${awayName}
@@ -383,7 +383,7 @@ function renderRecentForm(matches) {
                   <div class="flex items-center justify-between p-2 rounded-lg border ${color} transition-all hover:bg-white/10">
                     <div class="flex items-center gap-2">
                         <div class="w-5 h-5 flex items-center justify-center">
-                           <img src="${oppCrest}" class="max-w-full max-h-full object-contain opacity-90" loading="lazy">
+                           <img src="${oppCrest}" alt="${oppName}" class="max-w-full max-h-full object-contain opacity-90" loading="lazy" width="20" height="20">
                         </div>
                         <span class="text-xs md:text-sm font-bold opacity-90 theme-text truncate max-w-[80px] md:max-w-none">${oppName}</span>
                     </div>
