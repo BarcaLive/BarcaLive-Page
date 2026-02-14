@@ -392,8 +392,9 @@ const I18n = {
         let relative = "";
         if (diffDays === 0) relative = this.t('today');
         else if (diffDays === 1) relative = this.t('tomorrow');
-        else if (diffDays === 2) relative = this.t('dayAfterTomorrow');
         else if (diffDays === -1) relative = this.t('yesterday');
+        // Only use extended relative dates for Polish
+        else if (this.currentLang === 'pl' && diffDays === 2) relative = this.t('dayAfterTomorrow');
 
         const formattedDate = new Intl.DateTimeFormat(this.currentLang, options).format(date);
 
