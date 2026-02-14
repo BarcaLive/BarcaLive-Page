@@ -267,36 +267,36 @@ function renderNextMatch(match, isLive, standings) {
     </div>
 
     <!-- Teams & Score (Centered) -->
-    <div class="match-teams-score">
+    <div class="match-teams-score flex flex-row items-center justify-between w-full relative">
         
         <!-- Home Team -->
-        <div class="team-column group">
-             <div class="w-20 h-20 md:w-32 md:h-32 bg-white/5 rounded-[24px] md:rounded-[40px] flex items-center justify-center border border-white/10 mb-3 mx-auto shadow-xl transition-all"
+        <div class="team-column group flex-1 flex flex-col items-center justify-center min-w-0">
+             <div class="w-16 h-16 md:w-32 md:h-32 bg-white/5 rounded-[20px] md:rounded-[40px] flex items-center justify-center border border-white/10 mb-2 md:mb-3 mx-auto shadow-xl transition-all"
                   style="box-shadow:0 0 30px ${homeColor}20;">
-                <img src="${match.homeTeam.crest}" alt="${homeName}" class="w-12 h-12 md:w-20 md:h-20 object-contain no-animate">
+                <img src="${match.homeTeam.crest}" alt="${homeName}" class="w-10 h-10 md:w-20 md:h-20 object-contain no-animate">
              </div>
-             <h2 class="font-bold text-base md:text-2xl theme-text leading-tight whitespace-nowrap">
+             <h2 class="font-bold text-sm md:text-2xl theme-text leading-tight whitespace-nowrap truncate w-full text-center px-1">
                 ${homeName}
                 ${homePos ? `<div class="mt-1"><span class="bg-white/10 text-[9px] px-1.5 py-0.5 rounded opacity-60 font-mono theme-text whitespace-normal">#${homePos}</span></div>` : ''}
              </h2>
         </div>
 
         <!-- Score / Time -->
-        <div class="score-column">
-             <span class="text-[2.5rem] md:text-[3.5rem] font-black tracking-tighter leading-none ${isLive ? 'text-red-500' : 'theme-text'} whitespace-nowrap">
+        <div class="score-column flex flex-col items-center justify-center shrink-0 px-2 min-w-[80px]">
+             <span class="text-[2rem] md:text-[3.5rem] font-black tracking-tighter leading-none ${isLive ? 'text-red-500' : 'theme-text'} whitespace-nowrap">
                 ${mainDisplay}
              </span>
-             <span class="text-[10px] md:text-sm font-bold ${isLive ? 'text-gold' : 'opacity-50 theme-text'} uppercase tracking-widest mt-2 whitespace-nowrap" ${isLive ? 'data-live-minute' : ''}>
+             <span class="text-[9px] md:text-sm font-bold ${isLive ? 'text-gold' : 'opacity-50 theme-text'} uppercase tracking-widest mt-1 md:mt-2 whitespace-nowrap" ${isLive ? 'data-live-minute' : ''}>
                 ${subDisplay}
              </span>
         </div>
 
         <!-- Away Team -->
-        <div class="team-column group">
-             <div class="w-20 h-20 md:w-32 md:h-32 bg-white/5 rounded-[24px] md:rounded-[40px] flex items-center justify-center border border-white/10 mb-3 mx-auto shadow-xl transition-all">
-                <img src="${match.awayTeam.crest}" alt="${awayName}" class="w-12 h-12 md:w-20 md:h-20 object-contain no-animate">
+        <div class="team-column group flex-1 flex flex-col items-center justify-center min-w-0">
+             <div class="w-16 h-16 md:w-32 md:h-32 bg-white/5 rounded-[20px] md:rounded-[40px] flex items-center justify-center border border-white/10 mb-2 md:mb-3 mx-auto shadow-xl transition-all">
+                <img src="${match.awayTeam.crest}" alt="${awayName}" class="w-10 h-10 md:w-20 md:h-20 object-contain no-animate">
              </div>
-             <h2 class="font-bold text-base md:text-2xl theme-text leading-tight whitespace-nowrap">
+             <h2 class="font-bold text-sm md:text-2xl theme-text leading-tight whitespace-nowrap truncate w-full text-center px-1">
                 ${awayName}
                 ${awayPos ? `<div class="mt-1"><span class="bg-white/10 text-[9px] px-1.5 py-0.5 rounded opacity-60 font-mono theme-text whitespace-normal">#${awayPos}</span></div>` : ''}
              </h2>
