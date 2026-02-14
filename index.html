@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://esm.sh" crossorigin>
+    <link rel="preconnect" href="https://api.barcalive.online" crossorigin>
+    <link rel="preconnect" href="https://bwmkvehxzcdzdxiqdqin.supabase.co" crossorigin>
+    <link rel="dns-prefetch" href="https://bwmkvehxzcdzdxiqdqin.supabase.co">
+
+    <title>BarcaLive - Panel Główny | FC Barcelona</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <script>
+    // Force unregister Service Worker to prevent staging/caching issues
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function (registrations) {
+            for (let registration of registrations) {
+                registration.unregister();
+            }
+        });
+    }
+    </script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Critical Resource Preloads -->
+    <!-- Matches css/custom-theme.css paths: ../assets/fonts/... -> /assets/fonts/... -->
+    <link rel="preload" href="assets/fonts/SFPRODISPLAYREGULAR.woff" as="font" type="font/woff" crossorigin>
+    <link rel="preload" href="assets/fonts/SFPRODISPLAYMEDIUM.woff" as="font" type="font/woff" crossorigin>
+    <link rel="preload" href="assets/fonts/SFPRODISPLAYBOLD.woff" as="font" type="font/woff" crossorigin>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Centrum dowodzenia kibica FC Barcelony. Sprawdź wyniki na żywo, najbliższe mecze, formę zespołu i transmisje TV. Wszystko w jednym miejscu.">
+    <meta name="keywords"
+        content="FC Barcelona, Barça, live scores, La Liga, Champions League, football, soccer, fixtures, standings">
+    <meta name="author" content="BarcaLive">
+    <link rel="canonical" href="https://barcalive.online/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://barcalive.online/">
+    <meta property="og:title" content="BarcaLive - FC Barcelona Live Scores &amp; Fixtures">
+    <meta property="og:description"
+        content="Follow FC Barcelona live with real-time scores, upcoming fixtures, and comprehensive match statistics. Your premium Barcelona football hub.">
+    <meta property="og:image" content="https://barcalive.online/assets/favicons/apple-touch-icon.png">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:locale:alternate" content="pl_PL">
+    <meta property="og:site_name" content="BarcaLive">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://barcalive.online/">
+    <meta name="twitter:title" content="BarcaLive - FC Barcelona Live Scores">
+    <meta name="twitter:description"
+        content="Follow FC Barcelona live with real-time scores and comprehensive match statistics.">
+    <meta name="twitter:image" content="https://barcalive.online/assets/favicons/apple-touch-icon.png">
+
+    <!-- Theme and Mobile -->
+    <meta name="theme-color" content="#000000">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <style>
+        /* Critical CSS Inline - Header & Body Base */
+        body {
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 0 0 70px;
+            font-family: 'SF Pro Display', Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .mesh-background {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 10% 20%, rgba(165, 0, 68, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(0, 77, 152, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(237, 187, 0, 0.15) 0%, transparent 50%);
+            filter: blur(100px);
+            opacity: 0.3;
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 3rem;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            header {
+                flex-direction: row;
+            }
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.05em;
+            margin: 0;
+        }
+
+        .glass-premium {
+            background: rgba(20, 20, 25, 0.65);
+            backdrop-filter: blur(60px);
+            -webkit-backdrop-filter: blur(60px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+        }
+
+        .glass-premium:hover {
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.7);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+
+    <link rel="stylesheet" href="css/styles_final.css">
+    <link rel="stylesheet" href="assets/css/layout-fixes.css">
+    <link rel="icon" type="image/png" href="assets/favicons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="assets/favicons/favicon.svg" />
+    <link rel="shortcut icon" href="assets/favicons/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="BarcaLive" />
+    <link rel="manifest" href="assets/favicons/site.webmanifest" />
+</head>
+
+
+<body class="p-6 md:p-12">
+    <div class="mesh-background"></div>
+
+    <div class="noise-overlay"></div>
+    <div class="mesh-bg"></div>
+
+
+
+    <!-- Static Preload for Main Teams (Mobile Performance) -->
+    <!-- <img src="https://bwmkvehxzcdzdxiqdqin.supabase.co/storage/v1/object/public/logos/teams/2017.webp" alt="FCB Preload" style="display:none;" fetchpriority="high"> -->
+    <!-- <img src="https://bwmkvehxzcdzdxiqdqin.supabase.co/storage/v1/object/public/logos/teams/2016.webp" alt="RMA Preload" style="display:none;" fetchpriority="high"> -->
+
+
+    <main id="app-content" data-init="initOverviewPage" class="max-w-6xl mx-auto mt-32">
+        <header class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+            <div>
+                <div id="date-display" class="flex gap-1 mb-1">
+                    <div class="w-1 h-1 rounded-full bg-yellow-400"></div>
+                    <div class="w-1 h-1 rounded-full bg-yellow-400"></div>
+                    <div class="w-1 h-1 rounded-full bg-yellow-400"></div>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-bold tracking-tighter theme-text-gradient" data-i18n="overview">
+                    Overview</h1>
+            </div>
+            <div id="header-nav"></div>
+        </header>
+
+        <section id="view-overview" class="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <div class="md:col-span-8 glass-premium p-8 relative overflow-hidden group h-fit">
+                <!-- Badge is now rendered dynamically by JavaScript in renderNextMatch() -->
+                <!-- Badge is now rendered dynamically by JavaScript in renderNextMatch() -->
+                <div id="next-match-container" class="min-h-[220px] flex items-center justify-center relative">
+                    <!-- SKELETON LOADER (LCP Fix) -->
+                    <div class="flex flex-col items-center w-full animate-pulse">
+                        <!-- Badge Skeleton -->
+                        <div class="h-6 w-24 bg-white/10 rounded-full mb-6"></div>
+
+                        <!-- Mobile Competiton Logo Skeleton -->
+                        <div class="md:hidden w-14 h-14 bg-white/10 rounded-[18px] mb-6"></div>
+
+                        <div class="flex flex-col md:flex-row items-center gap-4 md:gap-16 w-full justify-center">
+                            <!-- Home Team Skeleton -->
+                            <div class="flex flex-col items-center gap-3">
+                                <div class="w-20 h-20 md:w-32 md:h-32 bg-white/10 rounded-[24px] md:rounded-[40px]">
+                                </div>
+                                <div class="h-4 w-24 bg-white/10 rounded"></div>
+                            </div>
+
+                            <!-- Score/Time Skeleton -->
+                            <div class="flex flex-col items-center gap-2 mt-4 md:mt-0">
+                                <div class="h-10 w-32 bg-white/10 rounded"></div>
+                                <div class="h-3 w-20 bg-white/5 rounded"></div>
+                            </div>
+
+                            <!-- Away Team Skeleton -->
+                            <div class="flex flex-col items-center gap-3">
+                                <div class="w-20 h-20 md:w-32 md:h-32 bg-white/10 rounded-[24px] md:rounded-[40px]">
+                                </div>
+                                <div class="h-4 w-24 bg-white/10 rounded"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-center">
+                    <a href="schedule.html" data-spa="true" data-i18n="seeFullSchedule"
+                        class="bg-white text-black px-8 py-3 rounded-2xl font-bold text-sm hover:scale-105 transition-transform">See
+                        Full Schedule</a>
+                </div>
+            </div>
+
+            <div class="md:col-span-4 glass-premium p-8 h-fit flex flex-col overflow-hidden">
+                <h2 class="text-xs font-black uppercase tracking-widest theme-text mb-6" data-i18n="recentForm">
+                    Recent
+                    Form</h2>
+                <div id="recent-form-container" class="space-y-4 flex-1 min-h-[250px] overflow-hidden">
+                </div>
+            </div>
+        </section>
+
+        <!-- Where to watch section -->
+        <section class="mt-6 glass-premium p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xs font-black uppercase tracking-widest theme-text" data-i18n="whereToWatch">Where to
+                    Watch</h2>
+            </div>
+
+            <div id="transmissions-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            </div>
+        </section>
+    </main>
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SportsOrganization",
+        "name": "BarcaLive",
+        "description": "Follow FC Barcelona live with real-time scores, fixtures, and comprehensive match statistics",
+        "url": "https://barcalive.online",
+        "logo": "https://barcalive.online/assets/favicons/apple-touch-icon.png",
+        "sameAs": [],
+        "sport": "Soccer"
+    }
+    </script>
+
+    <link rel="modulepreload" href="assets/js/core/api.js">
+    <link rel="modulepreload" href="assets/js/core/supabase-client.js">
+    <script src="https://cdn.tailwindcss.com" defer></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script src="js/components.js" defer></script>
+    <script src="js/i18n.js" defer></script>
+    <script src="assets/js/main.js" type="module" defer></script>
+</body>
+
+</html>
