@@ -4,6 +4,14 @@
  */
 export async function onRequest(context) {
     try {
+        // Security: verify shared secret
+        const url = new URL(context.request.url);
+        const secret = url.searchParams.get('secret') || context.request.headers.get('x-sync-secret');
+
+        if (!context.env.SYNC_SECRET || secret !== context.env.SYNC_SECRET) {
+            return new Response('Unauthorized', { status: 401 });
+        }
+
         // Targeted Worker URL
         const workerUrl = 'https://barcalive-sync.natekkz.workers.dev/trigger'; // Updated based on worker name in wrangler.toml 'barcalive-sync' BUT usually it would be [name].[subdomain].workers.dev. 
         // User's previous log showed 'https://075e6f2a.barcalive.pages.dev/api/trigger-sync'.
