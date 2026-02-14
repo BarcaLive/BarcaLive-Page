@@ -51,7 +51,7 @@ body.light-theme {
 
 /* Base */
 body {
-    font-family: 'Aeonik', 'SF Pro Display', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Satoshi', 'SF Pro Display', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
     margin: 0;
@@ -62,6 +62,81 @@ body {
     padding-bottom: 70px;
 
     transition: background-color 0.5s var(--spring-easing);
+}
+
+/* Fonts */
+@font-face {
+    font-family: 'Satoshi';
+    src: url('../assets/fonts/Satoshi-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url('../assets/fonts/Satoshi-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url('../assets/fonts/Satoshi-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url('../assets/fonts/Satoshi-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url('../assets/fonts/Satoshi-Black.otf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Footer - BarcaLive */
+.footer-barcalive {
+    width: 100%;
+    overflow: hidden;
+    padding: 4rem 0 8rem;
+    display: flex;
+    justify-content: center;
+    background: transparent;
+    opacity: 0.15;
+    pointer-events: none;
+    user-select: none;
+}
+
+.footer-barcalive-text {
+    display: flex;
+    font-family: 'Satoshi', sans-serif;
+    font-weight: 900;
+    font-size: clamp(100px, 18vw, 300px);
+    line-height: 0.8;
+    letter-spacing: -0.06em;
+    text-transform: uppercase;
+}
+
+.footer-letter {
+    display: inline-block;
+    color: var(--text-color);
+    transition: transform 0.4s var(--spring-easing), opacity 0.4s ease;
+}
+
+.footer-letter:hover {
+    transform: translateY(-20px);
+    opacity: 0.8;
 }
 
 /* Ambient Mode (Match Day) */

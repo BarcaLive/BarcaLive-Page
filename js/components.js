@@ -54,6 +54,22 @@ const Components = {
     `;
     },
 
+    footer: () => `
+        <footer class="footer-barcalive">
+            <div class="footer-barcalive-text">
+                <span class="footer-letter" style="transition-delay: 0ms">B</span>
+                <span class="footer-letter" style="transition-delay: 50ms">A</span>
+                <span class="footer-letter" style="transition-delay: 100ms">R</span>
+                <span class="footer-letter" style="transition-delay: 150ms">C</span>
+                <span class="footer-letter" style="transition-delay: 200ms">A</span>
+                <span class="footer-letter" style="transition-delay: 250ms">L</span>
+                <span class="footer-letter" style="transition-delay: 300ms">I</span>
+                <span class="footer-letter" style="transition-delay: 350ms">V</span>
+                <span class="footer-letter" style="transition-delay: 400ms">E</span>
+            </div>
+        </footer>
+    `,
+
     settingsOverlay: () => {
         const langs = ['pl', 'en', 'es', 'de', 'fr'];
         const current = window.I18n ? window.I18n.currentLang : 'pl';
@@ -166,6 +182,23 @@ const Components = {
             document.body.appendChild(tabBarContainer);
         } else {
             existingTabBar.outerHTML = Components.mobileTabBar(activePage);
+        }
+
+        // Footer
+        const existingFooter = document.querySelector('.footer-barcalive');
+        if (!existingFooter) {
+            const footerContainer = document.createElement('div');
+            footerContainer.innerHTML = Components.footer();
+            // Insert before tab bar if possible, or append to body
+            const tabbar = document.querySelector('.tab-bar');
+            if (tabbar && tabbar.parentElement) {
+                // Actually footer should be at bottom of content, above tab bar
+                // But tab bar is fixed. So appending to body is fine, but we need padding.
+                // Let's safe append to body.
+                document.body.appendChild(footerContainer.firstElementChild);
+            } else {
+                document.body.appendChild(footerContainer.firstElementChild);
+            }
         }
 
         // Settings Overlay
