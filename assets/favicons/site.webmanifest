@@ -1,6 +1,10 @@
 {
   "name": "BarcaLive",
   "short_name": "BarcaLive",
+  "description": "Follow FC Barcelona live with real-time scores, upcoming fixtures, and comprehensive match statistics.",
+  "start_url": "/",
+  "id": "online.barcalive.app",
+  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "/assets/favicons/web-app-manifest-192x192.png",
@@ -15,7 +19,19 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "display": "standalone",
+  "widgets": [
+    {
+      "name": "Next Match",
+      "description": "See the next or current FC Barcelona match.",
+      "tag": "next-match",
+      "ms_ac_template": "widget-match.html",
+      "data": {
+        "content_type": "text/html"
+      },
+      "screenshots": []
+    }
+  ]
 }

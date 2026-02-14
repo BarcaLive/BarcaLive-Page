@@ -116,7 +116,7 @@ function renderOverview(data) {
 
 // ── Hero card ────────────────────────────────────────────────────────
 
-function renderNextMatch(match, isLive, standings) {
+export function renderNextMatch(match, isLive, standings) {
   const container = document.getElementById('next-match-container');
   if (!match) {
     if (container) container.innerHTML = `<div class="text-center opacity-50 theme-text">${t('tbd')}</div>`;
