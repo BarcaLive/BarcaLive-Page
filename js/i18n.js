@@ -322,6 +322,16 @@ const translations = {
     }
 };
 
+// ⚡ Bolt Optimization: Cache Intl.DateTimeFormat instances
+const _i18nDateFormatterCache = new Map();
+const getI18nFormatter = (lang, options) => {
+    const key = `${lang}|${JSON.stringify(options)}`;
+    if (!_i18nDateFormatterCache.has(key)) {
+        _i18nDateFormatterCache.set(key, new Intl.DateTimeFormat(lang, options));
+    }
+    return _i18nDateFormatterCache.get(key);
+};
+
 const I18n = {
     currentLang: 'pl',
     availableLangs: ['pl', 'en', 'es', 'de', 'fr'],
@@ -411,7 +421,7 @@ const I18n = {
         // Only use extended relative dates for Polish
         else if (this.currentLang === 'pl' && diffDays === 2) relative = this.t('dayAfterTomorrow');
 
-        const formattedDate = new Intl.DateTimeFormat(this.currentLang, options).format(date);
+        const formattedDate = getI18nFormatter(this.currentLang, options).format(date);
 
         if (relative) {
             return `${relative}, ${formattedDate}`;
