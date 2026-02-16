@@ -2,6 +2,16 @@
  * Utility functions for BarcaLive Core System
  */
 
+// ⚡ Bolt Optimization: Cache Intl.DateTimeFormat instances
+const _utilsDateFormatterCache = new Map();
+const getUtilsFormatter = (lang, options) => {
+  const key = `${lang}|${JSON.stringify(options)}`;
+  if (!_utilsDateFormatterCache.has(key)) {
+    _utilsDateFormatterCache.set(key, new Intl.DateTimeFormat(lang, options));
+  }
+  return _utilsDateFormatterCache.get(key);
+};
+
 /**
  * Formats match time from ISO string or returns live status
  * @param {string} isoString - ISO date string of the match
@@ -44,7 +54,7 @@ export const formatDate = (isoString) => {
     return window.I18n.formatDate(isoString, { weekday: 'short', month: 'short', day: 'numeric' });
   }
 
-  return date.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+  return getUtilsFormatter(undefined, { weekday: 'short', month: 'short', day: 'numeric' }).format(date);
 };
 
 /**
@@ -102,7 +112,7 @@ export const updateDateDisplay = () => {
   } else if (window.I18n && typeof window.I18n.formatDate === 'function') {
     dateStr = window.I18n.formatDate(today, options);
   } else {
-    dateStr = today.toLocaleDateString(undefined, options);
+    dateStr = getUtilsFormatter(undefined, options).format(today);
   }
 
   // Use textContent to replace the dots with the actual date
