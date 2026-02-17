@@ -326,6 +326,7 @@ const I18n = {
     currentLang: 'pl',
     availableLangs: ['pl', 'en', 'es', 'de', 'fr'],
     initialized: false,
+    _dateTimeCache: new Map(),
 
     init() {
         if (this.initialized) return;
@@ -353,6 +354,7 @@ const I18n = {
     setLang(lang) {
         if (!translations[lang]) return;
         this.currentLang = lang;
+        this._dateTimeCache.clear();
         localStorage.setItem('bp_lang', lang);
         this.updatePage();
 
@@ -411,7 +413,17 @@ const I18n = {
         // Only use extended relative dates for Polish
         else if (this.currentLang === 'pl' && diffDays === 2) relative = this.t('dayAfterTomorrow');
 
-        const formattedDate = new Intl.DateTimeFormat(this.currentLang, options).format(date);
+        // Cache Key Strategy: lang + JSON(options)
+        // JSON.stringify is fast enough for small option objects compared to Intl constructor overhead
+        const key = this.currentLang + JSON.stringify(options);
+
+        let formatter = this._dateTimeCache.get(key);
+        if (!formatter) {
+            formatter = new Intl.DateTimeFormat(this.currentLang, options);
+            this._dateTimeCache.set(key, formatter);
+        }
+
+        const formattedDate = formatter.format(date);
 
         if (relative) {
             return `${relative}, ${formattedDate}`;
