@@ -85,6 +85,9 @@ function withSupabaseImageTransform(url, { width, height, quality = 70, format =
 
 /* ── Public helpers ─────────────────────────────────────────────────── */
 
+// Simple in-memory cache for repeated URL transforms
+const _assetCache = new Map();
+
 /**
  * Team crest URL from BarcaLive team ID.
  * Builds: bucket/teams/{id}.webp
@@ -92,16 +95,31 @@ function withSupabaseImageTransform(url, { width, height, quality = 70, format =
  * @returns {string} full URL or empty string
  */
 export function getTeamCrestUrl(teamId) {
-    const url = teamId ? `${STORAGE}/teams/${teamId}.webp` : '';
+    if (!teamId) return '';
+    // Use composite key to avoid collisions if ID happens to be a URL string (unlikely but safe)
+    const key = `id:${teamId}`;
+    if (_assetCache.has(key)) return _assetCache.get(key);
+
+    const url = `${STORAGE}/teams/${teamId}.webp`;
     // Default: small crest (common usage in tables/lists). Override by appending your own params if needed.
-    return withSupabaseImageTransform(url, { width: 96, height: 96, quality: 70, format: 'webp' });
+    const result = withSupabaseImageTransform(url, { width: 96, height: 96, quality: 70, format: 'webp' });
+
+    _assetCache.set(key, result);
+    return result;
 }
 
 /**
  * Team crest URL — pass-through for legacy code that already has the URL.
  */
 export function getTeamLogoUrl(crestUrl) {
-    return withSupabaseImageTransform(crestUrl, { width: 96, height: 96, quality: 70, format: 'webp' });
+    if (!crestUrl) return '';
+    const key = `url:${crestUrl}`;
+    if (_assetCache.has(key)) return _assetCache.get(key);
+
+    const result = withSupabaseImageTransform(crestUrl, { width: 96, height: 96, quality: 70, format: 'webp' });
+
+    _assetCache.set(key, result);
+    return result;
 }
 
 /**
