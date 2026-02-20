@@ -8,6 +8,9 @@ import { CONFIG } from './config.js';
 
 const STORAGE = CONFIG.STORAGE_BASE;
 
+// In-memory cache for generated URLs to avoid repeated URL construction overhead
+const _assetCache = new Map();
+
 // ── Channel name → logo filename ──────────────────────────────────────
 const CHANNEL_LOGO_MAP = {
     "Canal+ Sport": "canal-plus-sport-pl.webp",
@@ -92,16 +95,26 @@ function withSupabaseImageTransform(url, { width, height, quality = 70, format =
  * @returns {string} full URL or empty string
  */
 export function getTeamCrestUrl(teamId) {
+    const key = `crest_${teamId}`;
+    if (_assetCache.has(key)) return _assetCache.get(key);
+
     const url = teamId ? `${STORAGE}/teams/${teamId}.webp` : '';
     // Default: small crest (common usage in tables/lists). Override by appending your own params if needed.
-    return withSupabaseImageTransform(url, { width: 96, height: 96, quality: 70, format: 'webp' });
+    const res = withSupabaseImageTransform(url, { width: 96, height: 96, quality: 70, format: 'webp' });
+    _assetCache.set(key, res);
+    return res;
 }
 
 /**
  * Team crest URL — pass-through for legacy code that already has the URL.
  */
 export function getTeamLogoUrl(crestUrl) {
-    return withSupabaseImageTransform(crestUrl, { width: 96, height: 96, quality: 70, format: 'webp' });
+    const key = `logo_${crestUrl}`;
+    if (_assetCache.has(key)) return _assetCache.get(key);
+
+    const res = withSupabaseImageTransform(crestUrl, { width: 96, height: 96, quality: 70, format: 'webp' });
+    _assetCache.set(key, res);
+    return res;
 }
 
 /**
@@ -109,9 +122,14 @@ export function getTeamLogoUrl(crestUrl) {
  * Returns empty string if channel is unknown.
  */
 export function getChannelLogoUrl(channelName) {
+    const key = `channel_${channelName}`;
+    if (_assetCache.has(key)) return _assetCache.get(key);
+
     const file = CHANNEL_LOGO_MAP[channelName];
     const url = file ? `${STORAGE}/channel/${file}` : '';
-    return withSupabaseImageTransform(url, { width: 100, height: 100 });
+    const res = withSupabaseImageTransform(url, { width: 100, height: 100 });
+    _assetCache.set(key, res);
+    return res;
 }
 
 /**
@@ -121,6 +139,9 @@ export function getChannelLogoUrl(channelName) {
  */
 export function getCompetitionLogoUrl(name, theme = 'dark') {
     if (!name) return '';
+
+    const key = `comp_${name}_${theme}`;
+    if (_assetCache.has(key)) return _assetCache.get(key);
 
     // 1. Try exact match
     let code = COMPETITION_LOGO_MAP[name];
@@ -134,5 +155,7 @@ export function getCompetitionLogoUrl(name, theme = 'dark') {
     }
 
     const url = code ? `${STORAGE}/competition/${code}-${theme}.webp` : '';
-    return withSupabaseImageTransform(url, { width: 96, height: 96 });
+    const res = withSupabaseImageTransform(url, { width: 96, height: 96 });
+    _assetCache.set(key, res);
+    return res;
 }
