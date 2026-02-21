@@ -85,6 +85,10 @@ function withSupabaseImageTransform(url, { width, height, quality = 70, format =
 
 /* ── Public helpers ─────────────────────────────────────────────────── */
 
+const _crestCache = new Map();
+const _channelCache = new Map();
+const _compCache = new Map();
+
 /**
  * Team crest URL from BarcaLive team ID.
  * Builds: bucket/teams/{id}.webp
@@ -92,9 +96,14 @@ function withSupabaseImageTransform(url, { width, height, quality = 70, format =
  * @returns {string} full URL or empty string
  */
 export function getTeamCrestUrl(teamId) {
+    if (_crestCache.has(teamId)) return _crestCache.get(teamId);
+
     const url = teamId ? `${STORAGE}/teams/${teamId}.webp` : '';
     // Default: small crest (common usage in tables/lists). Override by appending your own params if needed.
-    return withSupabaseImageTransform(url, { width: 96, height: 96, quality: 70, format: 'webp' });
+    const result = withSupabaseImageTransform(url, { width: 96, height: 96, quality: 70, format: 'webp' });
+
+    _crestCache.set(teamId, result);
+    return result;
 }
 
 /**
@@ -109,9 +118,14 @@ export function getTeamLogoUrl(crestUrl) {
  * Returns empty string if channel is unknown.
  */
 export function getChannelLogoUrl(channelName) {
+    if (_channelCache.has(channelName)) return _channelCache.get(channelName);
+
     const file = CHANNEL_LOGO_MAP[channelName];
     const url = file ? `${STORAGE}/channel/${file}` : '';
-    return withSupabaseImageTransform(url, { width: 100, height: 100 });
+    const result = withSupabaseImageTransform(url, { width: 100, height: 100 });
+
+    _channelCache.set(channelName, result);
+    return result;
 }
 
 /**
@@ -121,6 +135,8 @@ export function getChannelLogoUrl(channelName) {
  */
 export function getCompetitionLogoUrl(name, theme = 'dark') {
     if (!name) return '';
+    const key = `${name}|${theme}`;
+    if (_compCache.has(key)) return _compCache.get(key);
 
     // 1. Try exact match
     let code = COMPETITION_LOGO_MAP[name];
@@ -134,5 +150,8 @@ export function getCompetitionLogoUrl(name, theme = 'dark') {
     }
 
     const url = code ? `${STORAGE}/competition/${code}-${theme}.webp` : '';
-    return withSupabaseImageTransform(url, { width: 96, height: 96 });
+    const result = withSupabaseImageTransform(url, { width: 96, height: 96 });
+
+    _compCache.set(key, result);
+    return result;
 }
