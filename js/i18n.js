@@ -326,6 +326,7 @@ const I18n = {
     currentLang: 'pl',
     availableLangs: ['pl', 'en', 'es', 'de', 'fr'],
     initialized: false,
+    _dateTimeCache: new Map(),
 
     init() {
         if (this.initialized) return;
@@ -393,6 +394,14 @@ const I18n = {
         return translations[this.currentLang][key] || key;
     },
 
+    getDateTimeFormat(lang, options) {
+        const key = `${lang}-${JSON.stringify(options)}`;
+        if (!this._dateTimeCache.has(key)) {
+            this._dateTimeCache.set(key, new Intl.DateTimeFormat(lang, options));
+        }
+        return this._dateTimeCache.get(key);
+    },
+
     formatDate(dateStr, options = {}) {
         if (!dateStr) return this.t('tbd');
         const date = new Date(dateStr);
@@ -411,7 +420,7 @@ const I18n = {
         // Only use extended relative dates for Polish
         else if (this.currentLang === 'pl' && diffDays === 2) relative = this.t('dayAfterTomorrow');
 
-        const formattedDate = new Intl.DateTimeFormat(this.currentLang, options).format(date);
+        const formattedDate = this.getDateTimeFormat(this.currentLang, options).format(date);
 
         if (relative) {
             return `${relative}, ${formattedDate}`;
