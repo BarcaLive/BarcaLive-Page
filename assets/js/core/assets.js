@@ -8,6 +8,11 @@ import { CONFIG } from './config.js';
 
 const STORAGE = CONFIG.STORAGE_BASE;
 
+// Caches for expensive URL generation
+const _crestCache = new Map();
+const _channelCache = new Map();
+const _compCache = new Map();
+
 // ── Channel name → logo filename ──────────────────────────────────────
 const CHANNEL_LOGO_MAP = {
     "Canal+ Sport": "canal-plus-sport-pl.webp",
@@ -92,9 +97,14 @@ function withSupabaseImageTransform(url, { width, height, quality = 70, format =
  * @returns {string} full URL or empty string
  */
 export function getTeamCrestUrl(teamId) {
-    const url = teamId ? `${STORAGE}/teams/${teamId}.webp` : '';
+    if (!teamId) return '';
+    if (_crestCache.has(teamId)) return _crestCache.get(teamId);
+
+    const url = `${STORAGE}/teams/${teamId}.webp`;
     // Default: small crest (common usage in tables/lists). Override by appending your own params if needed.
-    return withSupabaseImageTransform(url, { width: 96, height: 96, quality: 70, format: 'webp' });
+    const result = withSupabaseImageTransform(url, { width: 96, height: 96, quality: 70, format: 'webp' });
+    _crestCache.set(teamId, result);
+    return result;
 }
 
 /**
@@ -109,9 +119,14 @@ export function getTeamLogoUrl(crestUrl) {
  * Returns empty string if channel is unknown.
  */
 export function getChannelLogoUrl(channelName) {
+    if (!channelName) return '';
+    if (_channelCache.has(channelName)) return _channelCache.get(channelName);
+
     const file = CHANNEL_LOGO_MAP[channelName];
     const url = file ? `${STORAGE}/channel/${file}` : '';
-    return withSupabaseImageTransform(url, { width: 100, height: 100 });
+    const result = withSupabaseImageTransform(url, { width: 100, height: 100 });
+    _channelCache.set(channelName, result);
+    return result;
 }
 
 /**
@@ -121,6 +136,8 @@ export function getChannelLogoUrl(channelName) {
  */
 export function getCompetitionLogoUrl(name, theme = 'dark') {
     if (!name) return '';
+    const cacheKey = `${name}|${theme}`;
+    if (_compCache.has(cacheKey)) return _compCache.get(cacheKey);
 
     // 1. Try exact match
     let code = COMPETITION_LOGO_MAP[name];
@@ -134,5 +151,7 @@ export function getCompetitionLogoUrl(name, theme = 'dark') {
     }
 
     const url = code ? `${STORAGE}/competition/${code}-${theme}.webp` : '';
-    return withSupabaseImageTransform(url, { width: 96, height: 96 });
+    const result = withSupabaseImageTransform(url, { width: 96, height: 96 });
+    _compCache.set(cacheKey, result);
+    return result;
 }
