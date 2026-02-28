@@ -115,6 +115,10 @@ function normalizeMatch(raw) {
 
 /* ─── Full dataset normalizer ──────────────────────────────────────── */
 
+// ⚡ Bolt Optimization: Instantiate constant Sets once outside the execution context
+const UPCOMING_STATUSES = new Set(['SCHEDULED', 'TIMED', 'POSTPONED']);
+const LIVE_STATUSES = new Set(['IN_PLAY', 'PAUSED', 'HALFTIME', 'first_half', 'second_half', 'half_time', 'LIVE']);
+
 /**
  * Normalize the entire data object from API.
  * @param {Object} raw — the raw JSON response
@@ -153,13 +157,21 @@ export function normalizeData(raw) {
             // Let's coerce array to object Structure
             const all = raw.matches.map(normalizeMatch).filter(Boolean);
 
-            // Filter upcoming to exclude live/finished
-            // 'SCHEDULED', 'TIMED', 'POSTPONED' are upcoming. 'IN_PLAY', 'PAUSED', 'FINISHED' are not.
-            data.matches.upcoming = all.filter(m => ['SCHEDULED', 'TIMED', 'POSTPONED'].includes(m.status));
+            // ⚡ Bolt Optimization: Single-pass O(n) loop with Set O(1) lookup
+            data.matches.upcoming = [];
+            data.matches.finished = [];
+            data.matches.live = [];
 
-            data.matches.finished = all.filter(m => m.status === 'FINISHED');
-            // If data=match, raw.matches.live exists. If data=next, usually no live matches, but if so check status.
-            data.matches.live = all.filter(m => ['IN_PLAY', 'PAUSED', 'HALFTIME', 'first_half', 'second_half', 'half_time'].includes(m.status) || (m.status === 'LIVE'));
+            for (let i = 0; i < all.length; i++) {
+                const m = all[i];
+                if (m.status === 'FINISHED') {
+                    data.matches.finished.push(m);
+                } else if (UPCOMING_STATUSES.has(m.status)) {
+                    data.matches.upcoming.push(m);
+                } else if (LIVE_STATUSES.has(m.status)) {
+                    data.matches.live.push(m);
+                }
+            }
         }
     }
 
