@@ -60,17 +60,26 @@ const COMPETITION_LOGO_MAP = {
     "Superpuchar": "scde"
 };
 
+// Cache transform results. `new URL()` and string concats are expensive when called hundreds of times per render loop.
+const _transformCache = new Map();
+
 function withSupabaseImageTransform(url, { width, height, quality = 70, format = 'webp' } = {}) {
     if (!url) return '';
     if (!(width || height || quality || format)) return url;
 
+    const cacheKey = url + '|' + width + '|' + height + '|' + quality + '|' + format;
+    if (_transformCache.has(cacheKey)) {
+        return _transformCache.get(cacheKey);
+    }
+
+    let result;
     try {
         const u = new URL(url);
         if (width) u.searchParams.set('width', String(width));
         if (height) u.searchParams.set('height', String(height));
         if (quality) u.searchParams.set('quality', String(quality));
         if (format) u.searchParams.set('format', String(format));
-        return u.toString();
+        result = u.toString();
     } catch {
         // Fallback for relative / invalid URLs
         const params = [];
@@ -79,8 +88,11 @@ function withSupabaseImageTransform(url, { width, height, quality = 70, format =
         if (quality) params.push(`quality=${encodeURIComponent(quality)}`);
         if (format) params.push(`format=${encodeURIComponent(format)}`);
         if (!params.length) return url;
-        return url + (url.includes('?') ? '&' : '?') + params.join('&');
+        result = url + (url.includes('?') ? '&' : '?') + params.join('&');
     }
+
+    _transformCache.set(cacheKey, result);
+    return result;
 }
 
 /* ── Public helpers ─────────────────────────────────────────────────── */
