@@ -326,6 +326,7 @@ const I18n = {
     currentLang: 'pl',
     availableLangs: ['pl', 'en', 'es', 'de', 'fr'],
     initialized: false,
+    _dateTimeCache: new Map(),
 
     init() {
         if (this.initialized) return;
@@ -395,7 +396,7 @@ const I18n = {
 
     formatDate(dateStr, options = {}) {
         if (!dateStr) return this.t('tbd');
-        const date = new Date(dateStr);
+        const date = dateStr instanceof Date ? dateStr : new Date(dateStr);
         if (isNaN(date.getTime())) return dateStr;
 
         // Relative date logic
@@ -411,7 +412,14 @@ const I18n = {
         // Only use extended relative dates for Polish
         else if (this.currentLang === 'pl' && diffDays === 2) relative = this.t('dayAfterTomorrow');
 
-        const formattedDate = new Intl.DateTimeFormat(this.currentLang, options).format(date);
+        const cacheKey = `${this.currentLang}-${JSON.stringify(options)}`;
+        let formatter = this._dateTimeCache.get(cacheKey);
+        if (!formatter) {
+            formatter = new Intl.DateTimeFormat(this.currentLang, options);
+            this._dateTimeCache.set(cacheKey, formatter);
+        }
+
+        const formattedDate = formatter.format(date);
 
         if (relative) {
             return `${relative}, ${formattedDate}`;
