@@ -60,9 +60,16 @@ const COMPETITION_LOGO_MAP = {
     "Superpuchar": "scde"
 };
 
+const _transformCache = new Map();
+
 function withSupabaseImageTransform(url, { width, height, quality = 70, format = 'webp' } = {}) {
     if (!url) return '';
     if (!(width || height || quality || format)) return url;
+
+    // Fast path: cached transform string
+    const cacheKey = `${url}|${width}|${height}|${quality}|${format}`;
+    const cached = _transformCache.get(cacheKey);
+    if (cached) return cached;
 
     try {
         const u = new URL(url);
@@ -70,7 +77,9 @@ function withSupabaseImageTransform(url, { width, height, quality = 70, format =
         if (height) u.searchParams.set('height', String(height));
         if (quality) u.searchParams.set('quality', String(quality));
         if (format) u.searchParams.set('format', String(format));
-        return u.toString();
+        const transformedUrl = u.toString();
+        _transformCache.set(cacheKey, transformedUrl);
+        return transformedUrl;
     } catch {
         // Fallback for relative / invalid URLs
         const params = [];
@@ -79,7 +88,9 @@ function withSupabaseImageTransform(url, { width, height, quality = 70, format =
         if (quality) params.push(`quality=${encodeURIComponent(quality)}`);
         if (format) params.push(`format=${encodeURIComponent(format)}`);
         if (!params.length) return url;
-        return url + (url.includes('?') ? '&' : '?') + params.join('&');
+        const fallbackUrl = url + (url.includes('?') ? '&' : '?') + params.join('&');
+        _transformCache.set(cacheKey, fallbackUrl);
+        return fallbackUrl;
     }
 }
 
@@ -91,10 +102,14 @@ function withSupabaseImageTransform(url, { width, height, quality = 70, format =
  * @param {number|string} teamId — BarcaLive internal team ID
  * @returns {string} full URL or empty string
  */
+const _crestCache = new Map();
 export function getTeamCrestUrl(teamId) {
+    if (_crestCache.has(teamId)) return _crestCache.get(teamId);
     const url = teamId ? `${STORAGE}/teams/${teamId}.webp` : '';
     // Default: small crest (common usage in tables/lists). Override by appending your own params if needed.
-    return withSupabaseImageTransform(url, { width: 96, height: 96, quality: 70, format: 'webp' });
+    const result = withSupabaseImageTransform(url, { width: 96, height: 96, quality: 70, format: 'webp' });
+    _crestCache.set(teamId, result);
+    return result;
 }
 
 /**
@@ -108,10 +123,14 @@ export function getTeamLogoUrl(crestUrl) {
  * Channel logo URL from display name.
  * Returns empty string if channel is unknown.
  */
+const _channelCache = new Map();
 export function getChannelLogoUrl(channelName) {
+    if (_channelCache.has(channelName)) return _channelCache.get(channelName);
     const file = CHANNEL_LOGO_MAP[channelName];
     const url = file ? `${STORAGE}/channel/${file}` : '';
-    return withSupabaseImageTransform(url, { width: 100, height: 100 });
+    const result = withSupabaseImageTransform(url, { width: 100, height: 100 });
+    _channelCache.set(channelName, result);
+    return result;
 }
 
 /**
@@ -119,8 +138,12 @@ export function getChannelLogoUrl(channelName) {
  * @param {string} name  e.g. "La Liga", "Champions League"
  * @param {string} theme "dark" (default) or "light"
  */
+const _compCache = new Map();
 export function getCompetitionLogoUrl(name, theme = 'dark') {
     if (!name) return '';
+
+    const cacheKey = `${name}|${theme}`;
+    if (_compCache.has(cacheKey)) return _compCache.get(cacheKey);
 
     // 1. Try exact match
     let code = COMPETITION_LOGO_MAP[name];
@@ -134,5 +157,7 @@ export function getCompetitionLogoUrl(name, theme = 'dark') {
     }
 
     const url = code ? `${STORAGE}/competition/${code}-${theme}.webp` : '';
-    return withSupabaseImageTransform(url, { width: 96, height: 96 });
+    const result = withSupabaseImageTransform(url, { width: 96, height: 96 });
+    _compCache.set(cacheKey, result);
+    return result;
 }
