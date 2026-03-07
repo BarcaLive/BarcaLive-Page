@@ -50,11 +50,6 @@ const Components = {
                 <span data-i18n="schedule">Schedule</span>
             </a>
 
-             <button id="pwa-install-btn-mobile" class="pwa-install-trigger hidden tab-item flex items-center justify-center text-gold">
-                <i data-lucide="download"></i>
-                <span data-i18n="install">Install</span>
-            </button>
-
              <button onclick="window.toggleSettings()" class="tab-item flex items-center justify-center">
                 <i data-lucide="settings"></i>
                 <span data-i18n="settings">Settings</span>

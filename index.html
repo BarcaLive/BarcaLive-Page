@@ -171,8 +171,8 @@
             <div id="header-nav" class="flex items-center gap-4"></div>
         </header>
 
-        <section id="view-overview" class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10">
-            <div class="md:col-span-8 glass-premium p-8 relative overflow-hidden group h-fit">
+        <section id="view-overview" class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 flex flex-col">
+            <div class="md:col-span-8 flex-col order-1 md:order-1 glass-premium p-8 relative overflow-hidden group h-fit">
                 <!-- Badge is now rendered dynamically by JavaScript in renderNextMatch() -->
                 <div id="next-match-container" class="min-h-[220px] flex items-center justify-center relative">
                     <!-- SKELETON LOADER (LCP Fix) -->
@@ -214,23 +214,22 @@
                 </div>
             </div>
 
-            <div class="md:col-span-4 glass-premium p-8 h-fit flex flex-col overflow-hidden">
+            <div class="md:col-span-4 flex-col order-3 md:order-2 glass-premium p-8 h-fit flex overflow-hidden">
                 <h2 class="text-xs font-black uppercase tracking-widest theme-text mb-12" data-i18n="recentForm">
                     Recent
                     Form</h2>
                 <div id="recent-form-container" class="space-y-5 flex-1 min-h-[250px] overflow-hidden">
                 </div>
             </div>
-        </section>
+            <!-- Where to watch section -->
+            <div class="md:col-span-12 flex-col order-2 md:order-3 glass-premium p-8 mt-4 md:mt-0">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-xs font-black uppercase tracking-widest theme-text" data-i18n="whereToWatch">Where to
+                        Watch</h2>
+                </div>
 
-        <!-- Where to watch section -->
-        <section class="mt-10 glass-premium p-8">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-xs font-black uppercase tracking-widest theme-text" data-i18n="whereToWatch">Where to
-                    Watch</h2>
-            </div>
-
-            <div id="transmissions-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                <div id="transmissions-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                </div>
             </div>
         </section>
     </main>

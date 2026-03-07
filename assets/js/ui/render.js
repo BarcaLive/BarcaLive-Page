@@ -174,10 +174,23 @@ export function renderNextMatch(match, isLive, standings) {
     // Use I18n for date/time
     if (match.startTime) {
       const d = new Date(match.startTime);
-      // Time
+      const now = new Date();
+
+      const isToday = d.getDate() === now.getDate() && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+
+      const tomorrow = new Date(now);
+      tomorrow.setDate(now.getDate() + 1);
+      const isTomorrow = d.getDate() === tomorrow.getDate() && d.getMonth() === tomorrow.getMonth() && d.getFullYear() === tomorrow.getFullYear();
+
       mainDisplay = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      // Date
-      subDisplay = fmtDate(match.startTime, { weekday: 'long', month: 'long', day: 'numeric' });
+
+      if (isToday) {
+        subDisplay = '';
+      } else if (isTomorrow) {
+        subDisplay = window.I18n?.currentLang === 'pl' ? 'Jutro' : 'Tomorrow';
+      } else {
+        subDisplay = fmtDate(match.startTime, { month: 'short', day: 'numeric' });
+      }
     }
   }
 
@@ -196,8 +209,9 @@ export function renderNextMatch(match, isLive, standings) {
   const iconWhistle = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><line x1="10" y1="4" x2="20" y2="14"/><path d="M21.6 15.6a2.5 2.5 0 0 1 0 3.5l-2.4 2.4a2.5 2.5 0 0 1-3.5 0L5.3 11.1a2 2 0 0 1 0-2.8l2.4-2.4a2 2 0 0 1 2.8 0L9.8 14"/><path d="M14 7h7v7"/></svg>`;
   const iconTrophy = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>`;
 
-  const homeName = n(match.homeTeam.shortName);
-  const awayName = n(match.awayTeam.shortName);
+  const isMobile = window.innerWidth <= 768;
+  const homeName = n(match.homeTeam[isMobile ? 'shortName' : 'name'] || match.homeTeam.name);
+  const awayName = n(match.awayTeam[isMobile ? 'shortName' : 'name'] || match.awayTeam.name);
   const homeColor = match.homeShirtColor;
 
   // ── Info Pills (Replacing Win Prob)
@@ -286,9 +300,10 @@ export function renderNextMatch(match, isLive, standings) {
              <span class="text-[2.5rem] md:text-[3.5rem] font-black tracking-tighter leading-none ${isLive ? 'text-red-500' : 'theme-text'} whitespace-nowrap">
                 ${mainDisplay}
              </span>
+             ${subDisplay ? `
              <span class="text-xs md:text-sm font-bold ${isLive ? 'text-gold' : 'opacity-50 theme-text'} uppercase tracking-widest mt-1 md:mt-2 whitespace-nowrap" ${isLive ? 'data-live-minute' : ''}>
                 ${subDisplay}
-             </span>
+             </span>` : ''}
         </div>
 
         <!-- Away Team -->
@@ -522,13 +537,14 @@ function renderStandingsTable(container, tableData, competitionType) {
 
   let html = `
     <div class="table-wrapper">
-    <table class="football-table">
+    <table class="football-table w-full" style="table-layout: fixed;">
       <thead><tr>
-        <th width="36" class="theme-text">${t('pos')}</th><th class="theme-text">${t('club')}</th>
-        <th class="text-center theme-text">${t('pl')}</th>
-        <th class="hidden sm:table-cell text-center theme-text">${t('wdl')}</th>
-        <th class="text-center theme-text">${t('gd')}</th>
-        <th class="text-right theme-text">${t('pts')}</th>
+        <th width="32" class="theme-text">${t('pos')}</th>
+        <th class="theme-text text-left">${t('club')}</th>
+        <th width="32" class="text-center theme-text">${t('pl')}</th>
+        <th width="50" class="hidden sm:table-cell text-center theme-text">${t('wdl')}</th>
+        <th width="36" class="hidden sm:table-cell text-center theme-text">${t('gd')}</th>
+        <th width="36" class="text-right theme-text">${t('pts')}</th>
       </tr></thead>
       <tbody>`;
 
@@ -592,14 +608,14 @@ function renderStandingsTable(container, tableData, competitionType) {
       <tr class="${isBarca ? 'highlight-barca' : ''}" style="animation:none;">
         <td class="font-black text-xs ${posClass}">${position}</td>
         <td>
-          <div class="flex items-center gap-3 py-1">
-            ${crest ? `<img src="${crest}" alt="${name} Crest" class="w-7 h-7 object-contain" width="28" height="28" loading="lazy" referrerpolicy="no-referrer">` : ''}
-            <span class="font-bold ${isBarca ? 'text-gold' : 'theme-text'} text-xs md:text-base">${name}</span>
+          <div class="flex items-center gap-2 md:gap-3 py-1">
+            ${crest ? `<img src="${crest}" alt="${name} Crest" class="w-5 h-5 md:w-7 md:h-7 object-contain" width="28" height="28" loading="lazy" referrerpolicy="no-referrer">` : ''}
+            <span class="font-bold ${isBarca ? 'text-gold' : 'theme-text'} text-sm md:text-base">${name}</span>
           </div>
         </td>
         <td class="text-center opacity-40 font-bold text-xs theme-text">${played}</td>
         <td class="hidden sm:table-cell text-center opacity-40 text-[10px] font-black tracking-tighter theme-text">${won}-${draw}-${lost}</td>
-        <td class="text-center font-bold text-xs ${gd > 0 ? 'text-green-400' : gd < 0 ? 'text-red-400' : 'opacity-30 theme-text'}">${gd > 0 ? '+' : ''}${gd || 0}</td>
+        <td class="hidden sm:table-cell text-center font-bold text-xs ${gd > 0 ? 'text-green-400' : gd < 0 ? 'text-red-400' : 'opacity-30 theme-text'}">${gd > 0 ? '+' : ''}${gd || 0}</td>
         <td class="text-right font-black text-lg tracking-tighter theme-text">${points}</td>
       </tr>`;
   }).join('');
