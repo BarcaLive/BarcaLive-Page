@@ -275,18 +275,18 @@ export function renderNextMatch(match, isLive, standings) {
                   style="box-shadow:0 0 30px ${homeColor}20;">
                 <img src="${match.homeTeam.crest}" alt="${homeName}" class="w-10 h-10 md:w-20 md:h-20 object-contain no-animate" fetchpriority="high" width="80" height="80">
              </div>
-             <h2 class="font-bold text-sm md:text-2xl theme-text leading-tight whitespace-nowrap truncate w-full text-center px-1">
+             <h2 class="font-bold text-base md:text-2xl theme-text leading-tight text-center px-1">
                 ${homeName}
-                ${homePos ? `<div class="mt-1"><span class="bg-white/10 text-[9px] px-1.5 py-0.5 rounded opacity-60 font-mono theme-text whitespace-normal">#${homePos}</span></div>` : ''}
+                ${homePos ? `<div class="mt-1"><span class="bg-white/10 text-[9px] px-1.5 py-0.5 rounded opacity-60 font-mono theme-text">#${homePos}</span></div>` : ''}
              </h2>
         </div>
 
         <!-- Score / Time -->
-        <div class="score-column flex flex-col items-center justify-center shrink-0 px-2 min-w-[80px]">
-             <span class="text-[2rem] md:text-[3.5rem] font-black tracking-tighter leading-none ${isLive ? 'text-red-500' : 'theme-text'} whitespace-nowrap">
+        <div class="score-column flex flex-col items-center justify-center shrink-0 px-2 min-w-[90px]">
+             <span class="text-[2.5rem] md:text-[3.5rem] font-black tracking-tighter leading-none ${isLive ? 'text-red-500' : 'theme-text'} whitespace-nowrap">
                 ${mainDisplay}
              </span>
-             <span class="text-[9px] md:text-sm font-bold ${isLive ? 'text-gold' : 'opacity-50 theme-text'} uppercase tracking-widest mt-1 md:mt-2 whitespace-nowrap" ${isLive ? 'data-live-minute' : ''}>
+             <span class="text-xs md:text-sm font-bold ${isLive ? 'text-gold' : 'opacity-50 theme-text'} uppercase tracking-widest mt-1 md:mt-2 whitespace-nowrap" ${isLive ? 'data-live-minute' : ''}>
                 ${subDisplay}
              </span>
         </div>
@@ -296,9 +296,9 @@ export function renderNextMatch(match, isLive, standings) {
              <div class="w-16 h-16 md:w-32 md:h-32 bg-white/5 rounded-[20px] md:rounded-[40px] flex items-center justify-center border border-white/10 mb-2 md:mb-3 mx-auto shadow-xl transition-all">
                 <img src="${match.awayTeam.crest}" alt="${awayName}" class="w-10 h-10 md:w-20 md:h-20 object-contain no-animate" fetchpriority="high" width="80" height="80">
              </div>
-             <h2 class="font-bold text-sm md:text-2xl theme-text leading-tight whitespace-nowrap truncate w-full text-center px-1">
+             <h2 class="font-bold text-base md:text-2xl theme-text leading-tight text-center px-1">
                 ${awayName}
-                ${awayPos ? `<div class="mt-1"><span class="bg-white/10 text-[9px] px-1.5 py-0.5 rounded opacity-60 font-mono theme-text whitespace-normal">#${awayPos}</span></div>` : ''}
+                ${awayPos ? `<div class="mt-1"><span class="bg-white/10 text-[9px] px-1.5 py-0.5 rounded opacity-60 font-mono theme-text">#${awayPos}</span></div>` : ''}
              </h2>
         </div>
 
@@ -383,7 +383,7 @@ function renderRecentForm(matches) {
                         <div class="w-5 h-5 flex items-center justify-center">
                            <img src="${oppCrest}" alt="${oppName}" class="max-w-full max-h-full object-contain opacity-90" loading="lazy" width="20" height="20">
                         </div>
-                        <span class="text-xs md:text-sm font-bold opacity-90 theme-text truncate max-w-[80px] md:max-w-none">${oppName}</span>
+                        <span class="text-sm md:text-sm font-bold opacity-90 theme-text truncate max-w-[120px] md:max-w-none">${oppName}</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="text-xs font-black ${text}">${bS}-${oS}</span>
@@ -847,7 +847,7 @@ function renderScheduleList(type) {
           </div>
           <div class="flex-1 min-w-0">
             <div class="flex justify-between items-start mb-0.5">
-              <h4 class="font-bold text-base md:text-lg truncate flex items-center gap-1.5 theme-text">vs ${oppName}</h4>
+              <h4 class="font-bold text-base md:text-lg flex items-center gap-1.5 theme-text">vs ${oppName}</h4>
               <span class="text-[9px] font-black text-white/70 uppercase tracking-widest text-right theme-text">${compName}${roundDisplay}</span>
             </div>
             <p class="text-xs text-secondary font-medium theme-text opacity-80">${fmtDate(date, { weekday: 'long', month: 'short', day: 'numeric' })}${timeDisplay}</p>

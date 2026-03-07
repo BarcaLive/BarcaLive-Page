@@ -94,20 +94,57 @@ class BarcaAPI {
 
   /* ───────── Private ───────── */
 
-  async _fetchAndNotify(endpoint) {
-    barcaState.setState('loading');
+  /** @private SWR Cache TTL in ms (5 minutes) */
+  static _CACHE_TTL = 5 * 60 * 1000;
+
+  /** Read from sessionStorage cache */
+  _getCache(key) {
     try {
+      const raw = sessionStorage.getItem(key);
+      if (!raw) return null;
+      const { data, ts } = JSON.parse(raw);
+      if (Date.now() - ts > BarcaAPI._CACHE_TTL) {
+        sessionStorage.removeItem(key);
+        return null;
+      }
+      return data;
+    } catch { return null; }
+  }
+
+  /** Write to sessionStorage cache */
+  _setCache(key, data) {
+    try {
+      sessionStorage.setItem(key, JSON.stringify({ data, ts: Date.now() }));
+    } catch { /* quota exceeded — ignore */ }
+  }
+
+  async _fetchAndNotify(endpoint) {
+    try {
+      // 1. Stale-While-Revalidate: show cached data instantly
+      const cacheKey = `bl_cache_${endpoint}`;
+      const cached = this._getCache(cacheKey);
+      if (cached) {
+        const staleData = normalizeData(cached);
+        this._data = staleData;
+        this._notify(staleData);
+        // Don't show loading state — user sees content immediately
+      } else {
+        barcaState.setState('loading');
+      }
+
+      // 2. Network fetch (background revalidation)
       const url = `${CONFIG.API_BASE_URL}${endpoint}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
       const raw = await res.json();
+      this._setCache(cacheKey, raw);
       const data = normalizeData(raw);
 
       // Cache for synchronous access (e.g. theme toggles)
       this._data = data;
 
-      // Notify subscribers (legacy support for render pipeline)
+      // Notify subscribers (render pipeline)
       this._notify(data);
 
       barcaState.setState('idle');
@@ -115,7 +152,8 @@ class BarcaAPI {
     } catch (err) {
       console.error('[BarcaAPI] Fetch failed:', err);
       barcaState.setState('error');
-      return null;
+      // If we had stale data, return it so page isn't blank
+      return this._data || null;
     }
   }
 
