@@ -182,7 +182,7 @@ export function renderNextMatch(match, isLive, standings) {
       tomorrow.setDate(now.getDate() + 1);
       const isTomorrow = d.getDate() === tomorrow.getDate() && d.getMonth() === tomorrow.getMonth() && d.getFullYear() === tomorrow.getFullYear();
 
-      mainDisplay = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      mainDisplay = window.I18n?.formatTime ? window.I18n.formatTime(d) : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
       if (isToday) {
         subDisplay = '';
@@ -837,7 +837,7 @@ function renderScheduleList(type) {
       const showTime = idx < 3 || isResult;
       const utcH = date.getUTCHours();
       const isTbd = m.status === 'SCHEDULED' && (utcH === 0 || utcH === 1 || utcH === 2);
-      const timeValue = isTbd ? t('tbd') : date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const timeValue = isTbd ? t('tbd') : (window.I18n?.formatTime ? window.I18n.formatTime(date) : date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
       const timeDisplay = showTime ? ` • ${timeValue}` : '';
 
       const compName = m.competition.displayName || m.competition.code;
