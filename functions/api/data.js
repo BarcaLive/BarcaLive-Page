@@ -107,10 +107,8 @@ export async function onRequest(context) {
         const matches = (matchesData || [])
             .filter(item => item !== null)
             .map(mapMatch)
-            // Use Schwartzian transform for efficient sorting
-            .map(m => ({ m, time: new Date(m.utcDate).getTime() }))
-            .sort((a, b) => a.time - b.time)
-            .map(({ m }) => m);
+            // ⚡ Bolt: Direct string comparison for ISO dates (asc) avoids ~2000 Date allocations per request
+            .sort((a, b) => a.utcDate < b.utcDate ? -1 : a.utcDate > b.utcDate ? 1 : 0);
 
         const standings = (standingsData || [])
             .map(s => s.standings_data || s.data || s) // Handle the new schema (standings_data)
