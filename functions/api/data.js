@@ -107,10 +107,12 @@ export async function onRequest(context) {
         const matches = (matchesData || [])
             .filter(item => item !== null)
             .map(mapMatch)
-            // Use Schwartzian transform for efficient sorting
-            .map(m => ({ m, time: new Date(m.utcDate).getTime() }))
-            .sort((a, b) => a.time - b.time)
-            .map(({ m }) => m);
+            // Optimized: Direct string comparison of ISO 8601 dates avoids Date parsing overhead
+            .sort((a, b) => {
+                const ta = a.utcDate;
+                const tb = b.utcDate;
+                return ta < tb ? -1 : (ta > tb ? 1 : 0);
+            });
 
         const standings = (standingsData || [])
             .map(s => s.standings_data || s.data || s) // Handle the new schema (standings_data)
