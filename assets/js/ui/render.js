@@ -721,18 +721,15 @@ function renderScheduleList(type) {
 
   let filtered;
   if (type === 'upcoming') {
-    // Optimized: Map-Sort-Map for upcoming matches
-    const upcoming = (matches.upcoming || [])
-      .map(m => ({ item: m, time: new Date(m.startTime).getTime() }))
-      .sort((a, b) => a.time - b.time)
-      .map(({ item }) => item);
+    // Optimized: Direct string comparison for ISO 8601 dates (ascending)
+    const upcoming = [...(matches.upcoming || [])]
+      .sort((a, b) => a.startTime < b.startTime ? -1 : (a.startTime > b.startTime ? 1 : 0));
     filtered = (matches.live || []).concat(upcoming);
   } else {
-    // Optimized: Map-Sort-Map for finished matches (descending)
-    filtered = (matches.finished || [])
-      .map(m => ({ item: m, time: new Date(m.startTime).getTime() }))
-      .sort((a, b) => b.time - a.time)
-      .map(({ item }) => item);
+    // Optimized: Direct string comparison for ISO 8601 dates (descending)
+    const finished = [...(matches.finished || [])]
+      .sort((a, b) => a.startTime > b.startTime ? -1 : (a.startTime < b.startTime ? 1 : 0));
+    filtered = finished;
   }
 
   const container = document.getElementById('schedule-list');
