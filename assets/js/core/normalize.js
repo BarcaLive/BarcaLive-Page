@@ -140,26 +140,26 @@ export function normalizeData(raw) {
         // Handle data=next / data=prev where matches is an array directly? 
         // Prompt says: {"type":"next","matches":[...]}
         if (Array.isArray(raw.matches)) {
-            // Determine if upcoming or finished based on type or status
-            // But usually 'next' implies upcoming, 'prev' finished.
-            // We can map them to 'upcoming' generic bucket or specific based on status.
+            // Optimized: Single pass categorization using Sets (O(N)) instead of triple filter (O(3N))
+            data.matches.upcoming = [];
+            data.matches.finished = [];
+            data.matches.live = [];
 
-            // For safety, let's put them in both or infer.
-            // If the request was for schedule, we might just want a flat list.
-            // But render.js expects upcoming/live/finished keys for some views?
-            // Actually renderScheduleList uses window._renderScheduleData which is data.matches.
-            // If data.matches is an array, renderScheduleList might break if it expects .upcoming
+            const upcomingStatuses = new Set(['SCHEDULED', 'TIMED', 'POSTPONED']);
+            const liveStatuses = new Set(['IN_PLAY', 'PAUSED', 'HALFTIME', 'first_half', 'second_half', 'half_time', 'LIVE']);
 
-            // Let's coerce array to object Structure
-            const all = raw.matches.map(normalizeMatch).filter(Boolean);
+            for (const rawMatch of raw.matches) {
+                const m = normalizeMatch(rawMatch);
+                if (!m) continue;
 
-            // Filter upcoming to exclude live/finished
-            // 'SCHEDULED', 'TIMED', 'POSTPONED' are upcoming. 'IN_PLAY', 'PAUSED', 'FINISHED' are not.
-            data.matches.upcoming = all.filter(m => ['SCHEDULED', 'TIMED', 'POSTPONED'].includes(m.status));
-
-            data.matches.finished = all.filter(m => m.status === 'FINISHED');
-            // If data=match, raw.matches.live exists. If data=next, usually no live matches, but if so check status.
-            data.matches.live = all.filter(m => ['IN_PLAY', 'PAUSED', 'HALFTIME', 'first_half', 'second_half', 'half_time'].includes(m.status) || (m.status === 'LIVE'));
+                if (m.status === 'FINISHED') {
+                    data.matches.finished.push(m);
+                } else if (upcomingStatuses.has(m.status)) {
+                    data.matches.upcoming.push(m);
+                } else if (liveStatuses.has(m.status)) {
+                    data.matches.live.push(m);
+                }
+            }
         }
     }
 
